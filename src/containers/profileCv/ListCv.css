@@ -1,0 +1,134 @@
+.cv-list-container{
+    margin-top: 30px;
+    width: 62vw;
+    background-color: #fff;
+    padding: 0px;
+    border-radius: 15px;
+}
+
+.cv-list-header{
+    background-color: #003B73;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 15px 25px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.cv-list-header h1{
+    color: #fff;
+    margin: 0px;
+}
+
+.create-cv-link{
+    color: #fff;
+    margin-left: auto;
+    font-size: 1.2em;
+    font-weight: 500;
+    text-decoration: none; 
+}
+
+.list-cv-comtainer{
+    padding: 10px 30px;
+}
+
+.cv-item{
+    padding: 5px 20px;
+    border-radius: 10px;
+    border: solid 1px gainsboro;
+    margin-bottom: 10px;
+}
+
+.cv-item-head{
+    display: flex;
+    flex-direction: row;
+    padding-right: 15px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cv-item-head a{
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.cv-item-head h2{
+    color: #003B73;
+    margin: 5px 10px;
+}
+
+.cv-item-head h2:hover{
+    color: #11009E;
+}
+
+.main-cv-box{
+    background-color: #18A558;
+    padding: 5px 20px;
+    color: #fff;
+    border-radius: 8px;
+}
+
+#setMainCv{
+    background-color: #60A3D9;
+    color: #fff;
+    border-radius: 5px;
+    border: solid 1px #fff;
+    padding: 7px 18px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+#setMainCv:hover{
+    background-color: #003B73;
+}
+
+.cv-item-content{
+    padding: 0px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cv-item-content h4{
+    margin: 5px 0px;
+    color: #60A3D9;
+}
+
+.cv-item-content p{
+    font-style: italic;
+    font-size: 15px;
+    margin: 0px;
+}
+
+.cv-item-actions {
+    display: flex;
+    flex-direction: row;
+    padding-right: 20px;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.deleteCvBtn{
+    border: none;
+    background-color: #fff;
+    color: #003B73;
+    font-size: 16px;
+    color: #ff355e;
+    cursor: pointer;
+}
+
+.view-cv-link{
+    margin-left: 20px;
+    color: #18A558;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.update-cv-link{
+    color: #11009E;
+    text-decoration: none;
+    font-size: 16px;
+}

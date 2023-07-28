@@ -1,0 +1,203 @@
+.dashboard{
+    width: 90vw;
+    margin: 20px 5vw;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+
+}
+
+.dashboard h1{
+    margin: 10px 20px 0px 50px;
+    color: #003B73;
+
+}
+
+.dashboard-body{
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard-left{
+    display: flex;
+    flex-direction: column;
+    border: solid 2px gainsboro;
+    width: 55%;
+    padding: 0px;
+    border-radius: 10px;
+}
+
+.dashboard-left h2{
+    margin: 0px;
+    color: #60A3D9;
+    padding: 10px 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: solid 2px gainsboro;
+}
+
+.job-card-list,
+.list-jobs-box {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.job-item-card{
+    display: flex;
+    flex-direction: column;
+    padding: 15px 20px;
+    background-color: #f3f5f7;
+    margin: 10px;
+}
+
+.job-card-head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.job-card-head h3{
+    margin: 0px;
+    color: #003B73;
+}
+
+.update-job-btn{
+    background-color: #fff;
+    padding: 5px;
+    color: #003B73;
+    border-radius: 4px;
+    border: solid 1px #003B73;
+    cursor: pointer;
+}
+
+.update-job-btn-red{
+    background-color: #fff;
+    padding: 5px;
+    color: #EB455F;
+    border-radius: 4px;
+    border: solid 1px #EB455F;
+    cursor: pointer;
+}
+
+.update-job-btn:hover{
+    background-color: #003B73;
+    color: #fff;
+}
+
+.job-dates{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.date-live{
+    margin: 10px 0px;
+    color: #18A558;
+    font-style: italic;
+}
+
+.date-expired{
+    margin: 10px 0px;
+    color: #EB455F;
+    font-style: italic;
+}
+
+.job-count{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.job-count p{
+    width: 32%;
+    margin-left:2%;
+    margin: 10px 3px;
+}
+
+.new-apply-count{
+    display: flex;
+    flex-direction:row;
+}
+
+.last-count{
+    text-align: right;
+}
+
+.find-cv-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.find-cv-box a{
+    text-decoration: none;
+    color: #60A3D9;
+    align-items: center;
+}
+
+.find-cv-box a:hover{
+    text-decoration: none;
+    color: #003B73;
+}
+
+#seeAppliedBtn{
+    padding: 4px 12px;
+    color: #18A558;
+    border-radius: 4px;
+    border: solid 1px #18A558;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+#seeAppliedBtn:hover{
+    color: #fff;
+    background-color: #18A558;
+}
+
+.dashboard-right{
+    margin-left: 5%;
+    margin-right: auto;
+    border: solid 2px gainsboro;
+    width: 40%;
+    border-radius: 10px;
+}
+
+.dashboard-right h2{
+    margin: 0px;
+    padding: 10px 20px;
+    background-color: #003B73;
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.company-job-count{
+    padding: 10px;
+}
+
+.company-job-count h5{
+    margin: 10px 10px 15px 20px;
+
+}
+
+.no-expire{
+    color: #18A558;
+}
+
+.has-expire{
+    color: #EB455F;
+}
+
+.company-job-count h4{
+    color: #18A558;
+    margin: 10px 20px;
+}
+
+.job-chart{
+    margin: 20px 0px;
+    padding: 15px;
+}

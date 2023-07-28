@@ -1,0 +1,93 @@
+.form-container{
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    margin: 30px 30vw;
+    padding: 30px;
+    border-radius: 15px;
+    background-color: #fff;
+}
+
+.form-container h1{
+    margin: 0px 30px;
+    color: #003B73;
+}
+
+.form-container h3{
+    margin: 10px 30px;
+    color: #60A3D9;
+    font-weight: 500;
+}
+
+.form-setting{
+    padding: 10px 40px;
+}
+
+.input-div{
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px 20px 0px;
+    width: 100%;
+}
+
+.input-div input,
+.input-div select {
+    padding: 5px;
+    font-size: 16px;
+}
+
+.input-div label{
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #003B73;
+    margin-right: 5px;
+}
+
+.checkbox-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.checked-p{
+    margin: 2px 0px 0px 5px;
+    width: fit-content;
+    color: #116530;
+    font-weight: 500;
+}
+
+.unchecked-p{
+    margin: 2px 0px 0px 5px;
+    width: fit-content;
+    color: red;
+    font-weight: 500;
+}
+
+.check-input{
+    width: 18px;
+    height: 18px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+#btnSubmitSetting{
+    margin-top: 10px;
+    width: 160px;
+    padding: 8px 10px;
+    align-self: center;
+    background-color: #18A558;
+    border: solid 1px #fff;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#btnSubmitSetting:hover{
+    background-color: #116530;
+}
+
+#btnSubmitSetting:disabled {
+    background-color: grey;
+    color: #000;
+}

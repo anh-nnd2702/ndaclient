@@ -1,0 +1,70 @@
+.form-login,
+.form-signup{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    background-color: #fff;
+}
+
+.input-field{
+    width: 80%;
+    margin: 0px 0px 20px 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field label {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-field input{
+    font-size: 1.1rem;
+    padding: 5px;
+}
+
+.validate-box{
+    height: 20px;
+    margin: 3px 10%;
+    text-align: center;
+}
+
+.invalid-text{
+    margin: 0px;
+    color: red;
+    font-size: 0.9rem;
+    width: fit-content;
+}
+
+#btnLogin,
+#btnSignUp{
+    width: 80%;
+    margin: 20px 0px 0px 10%;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 4px;
+    border: solid 1px #61ba89;
+    cursor: pointer;
+    color: #fff;
+    background-color: #61ba89;
+}
+
+#btnLogin:hover,
+#btnSignUp:hover{
+    border: solid 1px #18A558;
+    background-color: #18A558;
+}
+
+.forgotpass-box {
+    text-align: right;
+    padding: 5px;
+}
+
+
+

@@ -1,0 +1,229 @@
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 0px 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 99%;
+    z-index: 99;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+}
+
+#appLogo {
+    max-height: 40px;
+    padding: 8px;
+    margin-top: 10px;
+}
+
+#navbar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    padding-top: 0px;
+    padding-left: 20px;
+}
+
+#mobile {
+    display: none;
+}
+
+.a_nav {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #003B73;
+    padding: 10px 14px;
+    position: relative;
+    font-weight: 500;
+    color: #003B73;
+    margin-bottom: 0px;
+    margin-top: auto;
+}
+
+.a_nav:hover {
+    background-color: #60A3D9;
+    color: #fff
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+.dropbtn {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.dropdown-item {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 180px;
+    z-index: 2;
+    margin-top: 10px;
+}
+
+.dropdown-item a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    text-transform: uppercase;
+    color: #003B73;
+}
+
+.dropdown-item a:hover {
+    font-weight: 500;
+    background-color: #60A3D9;
+    color: #fff;
+}
+
+.dropdown:hover .dropdown-item {
+    display: block;
+}
+
+.dropdown:focus .dropdown-item {
+    display: block;
+}
+
+
+#signupBtn {
+    padding: 8px 18px;
+    margin-right: 8px;
+    border-radius: 5px;
+    border: solid 1px #fff;
+    background-color: #003B73;
+    color: #fff;
+    cursor: pointer;
+}
+
+#signupBtn:hover {
+    background-color: #60A3D9;
+}
+
+#loginBtn {
+    padding: 8px 14px;
+    margin-right: 8px;
+    border-radius: 5px;
+    border: solid 1px #fff;
+    background-color: #18A558;
+    color: #fff;
+    cursor: pointer;
+}
+
+#loginBtn:hover {
+    background-color: #61ba89;
+}
+
+.candidate-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.candidate-info a {
+    text-decoration: none;
+    margin: 0px;
+}
+
+.avatar {
+    max-width: 30px;
+    margin: 5px;
+    margin-top: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border: solid 2px #18A558;
+    padding: 1px;
+}
+
+#logoutBtn {
+    padding: 8px 14px;
+    margin-left: 30px;
+    border-radius: 5px;
+    border: solid 1px #fff;
+    background-color: #003B73;
+    color: #fff;
+    cursor: pointer;
+}
+
+#logoutBtn:hover {
+    background-color: #EB455F;
+}
+
+.notification-icon {
+    color: #003B73;
+    position: relative;
+    cursor: pointer;
+    margin-left: 18px;
+    font-size: 24px;
+}
+
+.notification-count {
+    position: relative;
+    top: -15px;
+    left: -7px;
+    color: #fff;
+    background-color: red;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+
+.notification-popup {
+    position: absolute;
+    top: 55px;
+    right: 15px; 
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 8px;
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    border: solid 1px #003B73;
+  }
+  
+  .notification-item {
+    margin-bottom: 8px;
+    padding: 6px 4px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .to-view-apply{
+    margin-left: 3px;
+    padding: 3px 5px;
+    background-color: #18A558;
+    color: #fff;
+    border: solid 1px #18A558;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  .notification-item:last-child {
+    border-bottom: none;
+  }

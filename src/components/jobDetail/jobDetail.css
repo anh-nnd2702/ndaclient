@@ -1,0 +1,339 @@
+.job-body{
+    font-size: 18px;
+}
+
+.job-detail-header{
+    display: flex;
+    flex-direction: row;
+    max-height: 150px;
+    padding: 10px 0px;
+    border-radius: 10px;
+    background-color: #fff;
+    width: 100%;
+}
+
+.company-logo{
+    width: 15%;
+    height: 100%;
+    text-align: right;
+}
+
+.company-logo img{
+    max-height: 140px;
+    border-radius: 5px;
+    border: solid 1px #BFD7ED;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 2px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.detail-title-box{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.job-box-title{
+    margin: 5px 15px;
+    color: #003B73;
+}
+
+.company-name{
+    margin: 5px 15px;
+    color: #0074B7;
+}
+
+.detail-title-box p{
+    margin: auto 10px 5px 10px;
+}
+
+.job-header_action{
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    padding: 10px 20px;
+    justify-content: space-between;
+}
+
+.applied-p{
+    margin: 10px;
+    font-weight: 500;
+    color: #116530;
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.saved-p{
+    color: #ff355e;
+    font-style: italic;
+    margin: 10px;
+    font-weight: 500;
+    font-size: 1.1em;
+}
+
+#btnUnSave{
+    color: #fff;
+    background-color: #ff355e;
+    width: 150px;
+    padding: 7px 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    border: solid 1px #ff355e;
+}
+
+#btnUnSave:hover{
+    background-color: #fff;
+    color: #ff355e;
+}
+
+#btnApply{
+    width: 150px;
+    padding: 7px 5px;
+    border-radius: 4px;
+    background-color: #18A558;
+    border: solid 1px #18A558;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#btnApply:hover{
+    background-color: #116530;
+}
+
+#btnSave{
+    width: 150px;
+    padding: 7px 5px;
+    border-radius: 4px;
+    border: solid 1px #ff355e;
+    cursor: pointer;
+    margin-left: 10px;
+    color: #ff355e;
+    background-color: #fff;
+}
+
+#btnSave:hover{
+    background-color: #ff355e;
+    color: #fff;
+}
+
+.section-choices{
+    margin-top: 10px;
+    width: 98%;
+    display: flex;
+    flex-direction: row;
+    padding: 15px 10px;
+    background-color: #003B73;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px ;
+}
+
+.section-choices div{
+    margin: 5px 20px;
+    padding: 5px 20px;
+    border-radius: 10px;
+    border: solid 1px #fff;
+    cursor: pointer;
+}
+
+.section-choices div:hover{
+    background-color: #0074B7;
+}
+
+.section-choices div a{
+    text-decoration: none;
+    color: #fff;
+}
+
+.job-detail{
+    background-color: #fff;
+    margin-top: 0px;
+    margin-right: 0px;
+    width: calc(98% - 20px);
+    padding: 15px 20px;
+}
+
+.section-header{
+    margin: 0px 3% 10px 3%;
+    color: #003B73;
+}
+
+.basic-infor{
+    width: 90%;
+    margin-left: 3%;
+    margin-right: 3%;
+    background-color: #f3f4f3;
+    border-radius: 10px;
+    padding: 20px 25px;
+}
+
+.basic-infor h2{
+    font-size: 1.2rem;
+    margin: 0px;
+}
+
+.basic-infor-table{
+    display: flex;
+    flex-direction: row;
+}
+
+.infor-left{
+    width: 60%;
+}
+
+.description-infor{
+    padding: 15px 0px;
+}
+
+.description-infor p {
+    margin: 5px 4%;
+}
+
+.job-action{
+    margin: 20px 4% 40px 4%;
+}
+
+.action-btn-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.action-item{
+    margin-right: 30px;
+}
+
+.company-info-box{
+    margin: 20px 3%;
+    background-color: #f3f4f3;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.company-name_info{
+    font-size: 1.5rem;
+    color: #0074B7;
+    margin: 0px;
+}
+
+.intro-box h2{
+    font-size: 1.3rem;
+    color: #003B73;
+}
+
+.jd-header{
+    color: #0074B7;
+    margin: 10px 30px;
+    padding: 10px 20px;
+}
+
+.apply-box{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: white;
+    width: 600px;
+    border: 3px solid #f1f1f1;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.apply-box h2{
+    background-color: #003B73;
+    margin: 0px;
+    padding: 20px;
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: center;
+}
+
+.form-apply{
+    padding: 20px;
+}
+
+.apply-select-box{
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.apply-select-box label{
+    color: #003B73;
+    margin-bottom: 7px;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.apply-select-box select,
+.apply-select-box textarea{
+    padding: 5px;
+    font-size: 1.1em;
+}
+
+.apply-btn-box{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0px;
+}
+
+.btnSubmitApply{
+    width: 120px;
+    padding: 7px 5px;
+    border-radius: 4px;
+    border: solid 1px #18A558;
+    cursor: pointer;
+    color: #fff;
+    background-color: #18A558;
+}
+
+.btnSubmitApply:hover{
+    background-color: #116530;
+}
+
+.btnCancelApply{
+    width: 100px;
+    padding: 7px 5px;
+    border-radius: 4px;
+    border: solid 1px #ff355e;
+    cursor: pointer;
+    color: #ff355e;
+    background-color: #fff;
+}
+
+.btnCancelApply:hover{
+    background-color: #ff355e;
+    color: #fff;
+}
+
+.btn-login{
+    background-color: #fff;
+    cursor: pointer;
+    color: #18A558;
+    width: 150px;
+    height: 40px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: solid 2px #18A558;
+    font-weight: 600;
+}
+
+.btn-login:hover{
+    background-color: #18A558;
+    color: #fff;
+}
+
+.to-createcv-link{
+    margin-right: 310px;
+    text-decoration: none;
+    border: solid 1px #116530;
+    padding: 6px 16px;
+    font-size: 0.9em;
+    font-weight: 500;
+    border-radius: 4px;
+}

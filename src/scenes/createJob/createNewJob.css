@@ -1,0 +1,101 @@
+.job-create-body{
+    width: 80vw;
+    margin: 20px 10vw;
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 20px;
+}
+
+.job-create-body h1{
+    color:#003B73;
+    margin-left: 5%;
+}
+
+.job-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.job-form-box{
+    display: flex;
+    flex-direction: row;
+}
+
+.job-form-left{
+    width: 50%;
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.job-form-right{
+    width: 35%;
+    margin-right: 5%;
+}
+
+.job-input-box{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+}
+
+.job-input-box label{
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #003B73;
+    margin-bottom: 8px;
+}
+
+.input-text-area {
+    resize: vertical; /* Cho phép điều chỉnh kích thước theo chiều dọc */
+    padding: 5px;
+    font-size: 1.2em;
+    font-family: 'Segoe UI', Tahoma;
+}
+
+.job-input-box input,
+.job-input-box select{
+    padding: 5px;
+    font-size: 1.1em;
+}
+
+.input-number,
+.job-check-box{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.input-number label,
+.job-check-box label{
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #003B73;
+    margin-bottom: 12px;
+    margin-right: 5px;
+}
+
+.input-number input{
+    margin-right: 20px;
+    padding: 5px;
+    font-size: 1em;
+}
+
+#submitJobBtn{
+    width: 140px;
+    padding: 7px 14px;
+    background-color: #18A558;
+    color: #fff;
+    border-radius: 4px;
+    border: solid 1px #61ba89;
+    cursor: pointer;
+    margin-left: 5%;
+    margin-top: 20px;
+}
+
+.not-null-span{
+    color: red;
+    font-size: 0.9em;
+}

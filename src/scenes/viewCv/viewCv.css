@@ -1,0 +1,104 @@
+.viewCv{
+    width: 60vw;
+    margin: 30px 20vw;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.viewCv h1{
+    margin: 0px;
+    color: #003B73;
+    text-align: center;
+}
+
+.viewCv-body{
+    padding: 40px;
+}
+
+.cv-head-box{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.img-box{
+    width: 20%;
+    height: fit-content;
+    margin-right: 20px;
+    border: solid 2px #60A3D9;
+    text-align: center;
+    padding: 2px;
+}
+
+.img-box img{
+    width: 100%;
+    object-fit:cover;
+    overflow: hidden;
+    aspect-ratio: calc(3/4);
+    border-radius: 2px;
+    align-items: center;
+    justify-content: center;
+    display: block;
+    margin:auto;
+}
+
+.cv-infor{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.cv-infor h2{
+    margin: 0px 10px 0px 0px;
+    color: #02055A;
+    font-size: 1.8em;
+}
+
+.cv-infor h3{
+    margin: 8px 10px 10px 0px;
+    color: #253DA1;
+    font-style: italic;
+}
+
+.infor-box{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-right: 10px;
+    justify-content: space-between;
+}
+
+.infor-half{
+    display: flex;
+    flex-direction: column;
+}
+
+.infor-half p{
+    margin: 7px 10px;
+    color: #253DA1;
+}
+
+.infor-half p i{
+    margin-right: 8px;
+}
+
+.cv-item-list{
+    margin-top: 20px;
+}
+
+.cv-part{
+    margin: 30px 10px;
+}
+
+.cv-part h2{
+    margin: 5px 10px 10px 5px;
+}
+
+.cv-part-skill{
+    display: grid;
+    grid-template-columns: 45% 45%;
+    column-gap: 10%;
+    row-gap: 10px;
+}

@@ -1,0 +1,99 @@
+.job-card {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 20px 0px;
+    border-radius: 5px;
+    background-color: gainsboro;
+    border: solid 2px #BFD7ED;
+}
+
+.job-left {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    height: 100%;
+    padding: 2px;
+}
+
+.job-left img {
+    object-fit: contain;
+    max-width: 200px;
+    border: solid 1px #BFD7ED;
+    border-radius: 5px;
+    aspect-ratio: 1;
+}
+
+.job-right {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+}
+
+.card-head {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 0px 20px 0px 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-head a {
+    text-decoration: none;
+}
+
+.card-head h2 {
+    margin: 10px 0px;
+    color: #003B73;
+}
+
+.wage-tag {
+    margin-right: 0px;
+    width: fit-content;
+    border-radius: 10px;
+    border: solid 1px #003B73;
+    padding: 4px 15px;
+    margin-left: auto;
+    background-color: #003B73;
+    color: #fff;
+}
+
+.job-right h3 {
+    margin: 0px 10px;
+    color: #253DA1;
+}
+
+.job-address {
+    margin: 10px;
+    font-size: 1.1em;
+}
+
+.job-tags {
+    display: flex;
+    flex-direction: row;
+    margin: 0px 20px 10px 10px;
+    justify-content: space-between;
+}
+
+.job-tags p {
+    margin: 0px;
+    font-weight: 500;
+    color: #003B73;
+}
+
+.job-card-action {
+    text-align: right;
+    padding-right: 20px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.job-card-action a {
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 500;
+    margin: 0px;
+}

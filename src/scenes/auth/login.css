@@ -1,0 +1,42 @@
+.login-box{
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    align-items: center;
+    border-radius: 5px;
+    border: solid 1px #60A3D9;
+    background-color: #fff;
+}
+
+.login-box h1{
+    color: #003B73;
+}
+
+#appLogoLogin {
+    max-width: 250px;
+}
+
+.signup-option {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #60A3D9;
+    color: #fff;
+}
+
+.signup-option p {
+    margin-right: 8px;
+}
+
+.signup-company-option{
+    display: flex;
+    flex-direction: row;
+}
+
+.signup-company-option p{
+    margin: 0px 10px;
+}

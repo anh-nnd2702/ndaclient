@@ -1,0 +1,126 @@
+.all-job{
+    width: 80vw;
+    margin: 30px 10vw 30px 10vw;
+}
+
+.all-job-header{
+    background-color: #003B73;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.all-job-header h1{
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.search-btn{
+    padding: 7px 18px;
+    margin-left: 5px;
+    border-radius: 4px;
+
+}
+
+.search-btn:hover{
+
+}
+
+.search-div{
+   
+}
+
+.search-div input{
+    height: 32px;
+}
+
+.all-job-body{
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    padding-bottom: 30px;
+}
+
+.filter-box{
+    width: 20vw;
+    padding: 20px;
+}
+
+.job-list{
+    width: 60vw;
+    padding: 20px;
+}
+
+.filter-box{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 10px 20px;
+}
+
+.job-filter-box{
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.job-filter-box label{
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #003B73;
+    margin-bottom: 8px;
+}
+
+.job-filter-box select{
+    padding: 5px;
+    font-size: 1.1em;
+}
+
+.wage-input{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.job-filter-box input{
+    width: 50px;
+    margin-right: 10px;
+}
+
+.nego-wage-box{
+    margin-left: 10%;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #003B73;
+}
+
+.nego-wage-box input{
+    transform: scale(1.5);
+    margin-left: 8px;
+}
+
+.filter-btn{
+    width: 100px;
+    margin-left: 10%;
+    padding: 8px 14px;
+    border-radius: 5px;
+    background-color: #003B73;
+    color: #fff;
+    cursor: pointer;
+}
+
+.search-btn{
+    width: 130px;
+    padding: 8px 14px;
+    border-radius: 5px;
+    background-color: #18A558;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #fff;
+}

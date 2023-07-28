@@ -1,0 +1,137 @@
+.saved-job-body{
+    width: 70vw;
+    margin: 30px 15vw;
+    background-color: #fff;
+    border-radius: 25px;
+    padding: 20px 25px;
+}
+
+.saved-job-body h1{
+    margin: 10px 20px;
+    color: #003B73;
+}
+
+.saved-job-list{
+    display: flex;
+    flex-direction: column;
+}
+
+.saved-job-card{
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    border-radius: 15px;
+    border: solid 2px gainsboro;
+    padding: 10px;
+    width: 90%;
+}
+
+.card-img-box{
+    width: 20%;
+    align-items: center;
+}
+
+.card-img-box img{
+    aspect-ratio: 1;
+    max-width: 90%;
+    min-width: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: solid 1px #60A3D9;
+}
+
+.card-content-box{
+    margin-left: 10px;
+    width: 80%;
+}
+
+.card-content-box h2{
+    color: #003B73;
+    margin: 0px;
+}
+
+.title-box{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-content-box h3{
+    margin: 8px 0px;
+    color: #60A3D9;
+}
+
+.time-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 20px;
+}
+
+.card-content-box p{
+    margin: 5px 0px;
+}
+
+.wage-tag{
+    margin-right: 20px;
+    width: fit-content;
+    border-radius: 10px;
+    border: solid 1px #003B73;
+    padding: 4px 15px;
+    margin-left: auto;
+    background-color: #003B73;
+    color: #fff;
+}
+
+.card-actions{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.card-actions h4{
+    margin: 10px 0px;
+    color: #ff355e;
+}
+
+.action-see{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.card-actions a{
+    margin-right: 40px;
+    margin-left: auto;
+    text-decoration: none;
+    color: #003B73;
+    font-weight: 500;
+}
+
+.card-actions a:hover{
+    color: #60A3D9;
+    text-decoration: underline;
+}
+
+#unsaveBtn{
+    min-width: fit-content;
+    margin-right: 20px;
+    margin-left: auto;
+    padding: 5px 15px;
+    color: #ff355e;
+    background-color: #fff;
+    border-radius: 5px;
+    border: solid 1px #ff355e;
+    cursor: pointer;
+}
+
+#unsaveBtn:hover{
+    color: #fff;
+    background-color: #ff355e;
+}

@@ -1,0 +1,362 @@
+.create-cv-body {
+    width: 70vw;
+    margin: 20px 15vw;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 25px 30px 25px 40px;
+}
+
+.avatar-profile-box{
+    margin: 10px 10px 20px 10px;
+}
+
+.input-img{
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.input-img label{
+    margin-left: 5px;
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #003B73;
+}
+
+.create-cv-title {
+    margin: 10px 40px;
+    color: #003B73;
+}
+
+.form-create-cv {
+    padding: 20px;
+    padding-left: 40px;
+    margin-left: 30px;
+}
+
+.form-cv-infor {
+    width: 80%;
+    margin-left: 20px;
+}
+
+.cv-input-box {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.cv-input-box label {
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #003B73;
+}
+
+.select-boxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.cv-select-box {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cv-select-box label {
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #003B73;
+}
+
+.cv-input-box input,
+.cv-select-box select,
+.cv-input-box textarea {
+    max-width: 100%;
+    width: 100%;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.child-box {
+    padding: 20px;
+    width: 85%;
+}
+
+.child-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #BFD7ED;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.child-head h1 {
+    margin: 0px;
+    color: #003B73;
+    font-size: 1.8em;
+    font-weight: 500;
+}
+
+.btn-add {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    color: #003B73;
+    border: solid 2px #003B73;
+    background-color: #fff;
+}
+
+.btn-add:hover {
+    color: #fff;
+    border: solid 2px #fff;
+    background-color: #003B73;
+}
+
+.cv-item-box {
+    padding: 10px;
+    border: solid 1px #BFD7ED;
+    border-top: none;
+}
+
+.cv-item-div {
+    border: solid 1px gainsboro;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: top;
+}
+
+.item-content {
+    padding: 10px;
+}
+
+.item-skill-box {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.item-skill-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.item-describe {
+    margin: 8px 20px 10px 0px;
+}
+
+.rating-box {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.rate-icon {
+    color: #DAA520;
+    z-index: 1;
+}
+
+.item-content h2 {
+    margin: 0px;
+    text-transform: capitalize;
+}
+
+.content-date {
+    font-style: italic;
+}
+
+.item-skill-content h3,
+.item-content h3 {
+    margin: 10px 0px;
+}
+
+.cv-item-action {
+    border-left: solid 1px gainsboro;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    width: 50px;
+}
+
+.remove-item-btn {
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 0px;
+    font-size: 14px;
+    background-color: #fff;
+    border: solid 2px #BFD7ED;
+    cursor: pointer;
+    color: red;
+}
+
+.update-item-btn{
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 0px;
+    font-size: 14px;
+    background-color: #fff;
+    border: solid 2px #BFD7ED;
+    cursor: pointer;
+    color: #116530;
+}
+
+.update-item-btn:hover{
+    color: #fff;
+    border: solid 2px #fff;
+    background-color: #116530;
+}
+
+.remove-item-btn:hover {
+    color: #fff;
+    border: solid 2px #fff;
+    background-color: red;
+}
+
+#submitCvBtn {
+    margin-top: 20px;
+    width: 160px;
+    padding: 8px 10px;
+    margin-left: 35%;
+    background-color: #18A558;
+    border: solid 1px #fff;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#submitCvBtn:hover {
+    background-color: #116530;
+}
+
+#submitCvBtn:disabled {
+    background-color: grey;
+    color: #000;
+}
+
+.pop-up-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: white;
+    width: 500px;
+    border: 3px solid #f1f1f1;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.form-popup {
+    padding: 20px 30px;
+}
+
+.pop-up-box h2{
+    margin: 0px;
+    padding: 10px 10px 10px 20px;
+    background-color: #003B73;
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.box-fillover{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+}
+
+.popup-input-box{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.popup-input-box input,
+.popup-input-box select,
+.popup-input-box textarea{
+    padding: 5px;
+    font-size: 1em;
+    border: solid 1px gray;
+}
+
+.popup-input-box textarea{
+    max-height: 70px;
+}
+
+.popup-check-box{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.popup-check-box label{
+    font-weight: 500;
+    color: #003B73;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.popup-input-box label{
+    font-weight: 500;
+    color: #003B73;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.popup-add-btn{
+    margin: 10px 10px 0px 0px;
+    font-size: 1.1em;
+    padding: 5px 15px;
+    cursor: pointer;
+    background-color: #18A558;
+    color: #fff;
+    border-radius: 4px;
+    border: solid 1px #18A558;
+}
+
+.popup-add-btn:hover{
+    background-color: #116530;
+}
+
+.popup-cancel-btn{
+    margin: 10px 10px 0px 30px;
+    font-size: 1.1em;
+    padding: 5px 15px;
+    cursor: pointer;
+    background-color: #fff;
+    color: grey;
+    border-radius: 4px;
+    border: solid 1px red;
+}
+
+.popup-cancel-btn:hover{
+    background-color: red;
+    color: #fff;
+}
+
+.rate-level-p{
+    font-style: italic;
+    color: #003B73;
+    height: 20px;
+    margin: 5px;
+}

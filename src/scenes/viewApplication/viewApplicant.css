@@ -1,0 +1,66 @@
+.view-apply-body{
+    width: 80vw;
+    margin: 30px 10vw;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.view-job h2{
+    color: #003B73;
+}
+
+.cover-letter-box{
+    border: solid 2px #60A3D9;
+    width: 55%;
+    padding-left: 20px;
+    border-radius: 10px;
+}
+
+.cover-letter-box h3{
+    color: #60A3D9;
+}
+
+.cover-letter-box p{
+    font-size: 1.1em;
+}
+
+#cvPassBtn{
+    width: 150px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    background-color: #18A558;
+    color: #fff;
+    margin-left: 30px;
+    border: solid 1px #18A558;
+}
+
+#cvFailBtn{
+    width: 150px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    background-color: #EB455F;
+    color: #fff;
+    margin-left: 30px;
+    border: solid 1px #EB455F;
+}
+
+#backBtn{
+    width: 150px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    background-color: #60A3D9;
+    color: #fff;
+    margin-left: 30px;
+    border: solid 1px #60A3D9;
+}
+
+.print-pdf{
+    width: 150px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    background-color: #ffd23f;
+    color: #fff;
+    margin-left: 30px;
+    border: solid 1px #ffd23f;
+}
