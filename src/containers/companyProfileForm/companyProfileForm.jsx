@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { updateCandidate } from "../../apis/candidate";
-import { NavLink } from "react-router-dom";
-import { format } from "date-fns";
 import { getCity } from "../../apis/reference";
-import { updateCompany, updateCompanyLogo } from "../../apis/company";
+import { updateCompany, updateCompanyLogo, updateCompanyLicense } from "../../apis/company";
+import { NavLink } from "react-router-dom";
 
-const CompanyProfileForm = ({company, onCompanyUpdate}) => {
+const CompanyProfileForm = ({ company, onCompanyUpdate }) => {
     const [companyName, setCompanyName] = useState(company.companyName);
     const [companyPhone, setCompanyPhone] = useState(company.companyPhone || "");
     const [companyAddress, setCompanyAddress] = useState(company.companyAddress || "");
@@ -15,7 +13,9 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
     const [companyLink, setCompanyLink] = useState(company.companyLink || "");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [cityList, setCityList] = useState([])
+    const [cityList, setCityList] = useState([]);
+    const [companyLicense, setCompanyLicense] = useState(company.companyLicense);
+    const [selectedPdf, setSelectedPdf] = useState(null);
 
     useEffect(() => {
         setCompanyName(company.companyName);
@@ -28,18 +28,7 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
         fetchCity()
     }, [company])
 
-    useEffect(() => {
-        setCompanyName(company.companyName);
-        setCompanyAddress(company.companyAddress);
-        setCompanyIntro(company.companyIntro);
-        setCompanyLink(company.companyLink);
-        setCompanyLogo(company.companyLogo);
-        setCityId(company.cityId);
-        setCompanyPhone(company.companyPhone);
-        fetchCity()
-    }, [])
-
-    const fetchCity = async () =>{
+    const fetchCity = async () => {
         const city = await getCity()
         setCityList(city)
     }
@@ -47,7 +36,6 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
     const handleLogoChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
-        const reader = new FileReader();
 
         if (file) {
             const reader = new FileReader();
@@ -59,11 +47,23 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
         }
     };
 
-    const handleSubmitCompany = async (e) =>{
+    const handleLicenseChange = (e) => {
+        const file = e.target.files[0];
+        // Kiểm tra xem tệp có phải là PDF hay không
+        if (file && file.type === "application/pdf") {
+            setSelectedPdf(file);
+        } else {
+            setSelectedPdf(null);
+            // Hiển thị thông báo lỗi nếu tệp không phải là PDF
+            alert("Vui lòng tải lên tệp PDF");
+        }
+    };
+
+    const handleSubmitCompany = async (e) => {
         e.preventDefault();
         setIsSubmitting(true)
 
-        try{
+        try {
             const companyUpdated = await updateCompany({
                 companyName,
                 companyAddress,
@@ -72,17 +72,31 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
                 companyLink,
                 cityId
             });
-            if(companyUpdated){
+
+            if (selectedPdf) {
+                const formData = new FormData();
+                formData.append('license', selectedPdf);
+
+                const response = await updateCompanyLicense(formData);
+
+                // Xử lý phản hồi từ server
+                const { message, updatedLicense } = response;
+                if (!updatedLicense) {
+                    throw new Error("Tải lên giấy phép thất bại!")
+                }
+            }
+
+            if (companyUpdated) {
                 localStorage.setItem('companyName', companyName);
                 const isUpdated = true;
-                onCompanyUpdate({isUpdated});
+                onCompanyUpdate({ isUpdated });
             }
-            
+
         }
-        catch(error){
+        catch (error) {
             console.log(error);
         }
-        finally{
+        finally {
             setIsSubmitting(false);
         }
     }
@@ -115,23 +129,23 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
         <div className="form-box">
             <div>
                 <form onSubmit={handleSubmitLogo} className="logo-form">
-                        <label htmlFor="companyLogo">Ảnh/Logo công ty:</label>
-                        <div className="avatar-profile-box">
-                            {companyLogo ? (
-                                <img src={companyLogo} alt="company Logo" />
-                            ) : (
-                                <img src="https://drive.google.com/uc?export=view&id=1WaXr3NCH6M8_xdwwwYiNNXpgvoMjlFTl" alt="Default Avatar" />
-                            )}
-                        </div>
-                        <input
-                            type="file"
-                            id="companyLogo"
-                            accept="image/*"
-                            onChange={handleLogoChange}
-                        />
-                        <div>
-                            <button className="submit-btn" id="submitImg" type="submit" disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Lưu thay đổi"}</button>
-                        </div>
+                    <label htmlFor="companyLogo">Ảnh/Logo công ty:</label>
+                    <div className="avatar-profile-box">
+                        {companyLogo ? (
+                            <img src={companyLogo} alt="company Logo" />
+                        ) : (
+                            <img src="https://drive.google.com/uc?export=view&id=1WaXr3NCH6M8_xdwwwYiNNXpgvoMjlFTl" alt="Default Avatar" />
+                        )}
+                    </div>
+                    <input
+                        type="file"
+                        id="companyLogo"
+                        accept="image/*"
+                        onChange={handleLogoChange}
+                    />
+                    <div>
+                        <button className="submit-btn" id="submitImg" type="submit" disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Lưu thay đổi"}</button>
+                    </div>
                 </form>
             </div>
             <form className="form-profile" onSubmit={handleSubmitCompany}>
@@ -175,7 +189,7 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
                         type="text"
                         id="companyAddress"
                         value={companyAddress}
-                        onChange={(e)=>setCompanyAddress(e.target.value)}
+                        onChange={(e) => setCompanyAddress(e.target.value)}
                     />
                 </div>
                 <div className="input-box">
@@ -184,7 +198,7 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
                         type="text"
                         id="companyLink"
                         value={companyLink}
-                        onChange={(e)=>setCompanyLink(e.target.value)}
+                        onChange={(e) => setCompanyLink(e.target.value)}
                     />
                 </div>
                 <div className="input-box">
@@ -194,9 +208,25 @@ const CompanyProfileForm = ({company, onCompanyUpdate}) => {
                         type="text"
                         id="companyIntro"
                         value={companyIntro}
-                        onChange={(e)=>setCompanyIntro(e.target.value)}
+                        onChange={(e) => setCompanyIntro(e.target.value)}
                     ></textarea>
                 </div>
+                {(company.companyLicense) ? (<div>
+                    <div className="input-box">
+                        <label>Giấy phép kinh doanh</label>
+                        <NavLink to={company.companyLicense}>Xem giấy phép kinh doanh</NavLink>
+                    </div>
+                </div>) : (
+                    <div className="input-box">
+                        <label>Tải lên giấy phép kinh doanh</label>
+                        <input
+                            type="file"
+                            id="companyLogo"
+                            accept=".pdf"
+                            onChange={handleLicenseChange}
+                        />
+                    </div>
+                )}
                 <button className="submit-btn" id="submitProfileBtn" type="submit" disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Lưu thông tin"}</button>
             </form>
         </div>

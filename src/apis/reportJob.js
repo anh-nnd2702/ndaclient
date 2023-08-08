@@ -22,3 +22,75 @@ export const createReport = async (reportText, jobId) => {
     }
 }
 
+export const getAllReport = async ()=>{
+    try {
+        const token = Cookies.get('token');
+        const result = await axios.get(`${DOMAIN}/report/`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+        return result.data.reportJobs;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const deleteReport = async (reportId) =>{
+    try {
+        const token = Cookies.get('token');
+        const result = await axios.delete(`${DOMAIN}/report/`+reportId,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+        return result.data;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const updateReportStatus = async (reportId, newStatus) =>{
+    try {
+        const token = Cookies.get('token');
+        const result = await axios.put(`${DOMAIN}/report/`+reportId,{newStatus},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+        return result.data.reportJob;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const updateReportByJobId = async (jobId, newStatus) =>{
+    try {
+        const token = Cookies.get('token');
+        const result = await axios.put(`${DOMAIN}/report/job/`+jobId,{newStatus},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+        return result.data.reportJob;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+

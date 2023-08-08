@@ -2,20 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createReport } from "../../apis/reportJob.js";
+import { createReport, updateReportByJobId, updateReportStatus } from "../../apis/reportJob.js";
 import "./jobDetail.css";
-import { getJob, getJobByCompany } from "../../apis/job.js";
+import { getJob, getJobByCompany, updateJobStatus } from "../../apis/job.js";
 import JobDetail from "../../components/jobDetail/jobDetail";
 import JobByCompany from "../../components/jobByCompany/jobByCompany";
-import {
-  getCandidateApplyByJob,
-  createApply,
-} from "../../apis/applyJob.js";
-import {
-  createSaveJob,
-  getSavedJobByJobId,
-  unSaveJob,
-} from "../../apis/savejob";
+import { getCandidateApplyByJob, createApply} from "../../apis/applyJob.js";
+import {createSaveJob, getSavedJobByJobId, unSaveJob } from "../../apis/savejob";
 
 const JobScene = ({ isLoggedIn }) => {
   const { jobId } = useParams();
@@ -30,6 +23,8 @@ const JobScene = ({ isLoggedIn }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [savedJob, setSavedJob] = useState({});
+  const [isLoginAdmin, setIsLoginAdmin] = useState(false);
+  const [isNotExpired, setIsExpired] = useState(false);
   const isToastShownRef = useRef(false);
 
   const checkSaved = async () => {
@@ -108,18 +103,26 @@ const JobScene = ({ isLoggedIn }) => {
     );
   };
 
+  const checkAdmin = () =>{
+    return (
+      localStorage.getItem("isAdmin") === true ||
+      localStorage.getItem("isAdmin") === "true"
+    )
+  }
+
   const fetchJob = async () => {
     try {
-      const job = await getJob(jobId);
+      const job = await getJob(jobId, checkAdmin())      
       setJobData(job);
       setCompany(job.company);
       setCity(job.City);
       setWorkFiled(job.WorkField);
       setWorkLevel(job.WorkLevel);
       setJobType(job.JobType);
+      setIsExpired(checkExpired(job.expireDate))
       const jobsByCompany = await getJobByCompany(job.company.Id);
       const filteredJob = jobsByCompany.filter(
-        (jobByCompany) => jobByCompany.jobId != jobId
+        (jobByCompany) => jobByCompany.jobId !== jobId
       );
       setJobByCompany(filteredJob);
     } catch (error) {
@@ -133,6 +136,7 @@ const JobScene = ({ isLoggedIn }) => {
       setIsLogin(checkLogin());
       checkApplied();
       checkSaved();
+      setIsLoginAdmin(checkAdmin());
     }
   }, []);
 
@@ -142,6 +146,7 @@ const JobScene = ({ isLoggedIn }) => {
       setIsLogin(checkLogin());
       checkApplied();
       checkSaved();
+      setIsLoginAdmin(checkAdmin());
     }
   }, [isLoggedIn, jobId]);
 
@@ -193,7 +198,63 @@ const JobScene = ({ isLoggedIn }) => {
     }
   };
 
+  const handleBlockJob = async (jobId) =>{
+    try{
+      const result = await updateJobStatus(jobId, {isActive: false} );
+      if(result){
+        toast.success("Đã ẩn tin tuyển dụng!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 800,
+        });
+        isToastShownRef.current = true;
+      }
+    }
+    catch(error){
+      toast.error("Cõ lỗi xảy ra khi ẩn tin!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 800,
+      });
+      isToastShownRef.current = true;
+    }
+  }
+
+  const handlePassAllReports = async (jobId) => {
+    try{
+      const newStatus = true;
+      const result = await updateReportByJobId(jobId, newStatus);
+      if(result){
+        toast.success("Đã bỏ qua các báo cáo!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 800,
+        });
+        isToastShownRef.current = true;
+        const updatedJob = { ...jobData, ReportJobs: [] };
+        setJobData(updatedJob);
+      }
+    }
+    catch(error){
+      toast.error("Cõ lỗi xảy ra khi cập nhật báo cáo!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 900,
+      });
+      isToastShownRef.current = true;
+    }
+  }
+
+  const checkExpired = (expireDate) =>{
+    const currentDate = new Date();
+    const expireDateObject = new Date(expireDate);
+
+  // So sánh ngày expireDate với ngày hiện tại
+  if (expireDateObject < currentDate) {
+    return false; 
+  } else {
+    return true; 
+  }
+  }
+
   return (
+    (isNotExpired) ? (
     <div className="job-scene-body">
       <JobDetail
         job={jobData}
@@ -209,10 +270,17 @@ const JobScene = ({ isLoggedIn }) => {
         onUnsaveJob={onUnsaveJob}
         isSaved={isSaved}
         onReport={handleSubmitReport}
+        isAdmin={isLoginAdmin}
+        onBlockJob={handleBlockJob}
+        onPassReports={handlePassAllReports}
       />
       <JobByCompany jobs={jobByCompany} />
       <ToastContainer />
-    </div>
+    </div>):(
+      <div className="job-scene-body">
+          <h1>Không tìm thấy tin tuyển dụng này!</h1>
+      </div>
+    )
   );
 };
 

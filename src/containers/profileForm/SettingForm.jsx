@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { updateCandidate } from "../../apis/candidate";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "./SettingForm.css"
+import "./SettingForm.css";
+import TagsInput from 'react-tagsinput';
+import 'react-tagsinput/react-tagsinput.css';
 
 const SettingForm = ({ candidate, cityList, workFieldList, workLevelList, jobTypeList }) => {
     const [isSeeking, setIsSeeking] = useState(false);
@@ -13,19 +15,31 @@ const SettingForm = ({ candidate, cityList, workFieldList, workLevelList, jobTyp
     const [experience, setExperience] = useState(0);
     const [jobTypeId, setJobTypeId] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [cityId, setCityId] = useState(0)
-    const isUndefined = (val) =>{
-        return (typeof(val) === "undefined" || val ==="null" || val === null);
+    const [cityId, setCityId] = useState(0);
+    const [tags, setTags] = useState([]);
+
+    const handleChangeTags = (tags) => {
+      setTags(tags);
+    };
+
+    const isUndefined = (val) => {
+        return (typeof (val) === "undefined" || val === "null" || val === null);
     }
     useEffect(() => {
         setIsSeeking(candidate.isSeeking);
         setIsAcceptEmail(candidate.isAcceptEmail);
-        setMinWage(isUndefined(candidate.minWage)?0:candidate.minWage);
-        setWorkField(isUndefined(candidate.workFieldId)?0:candidate.workFieldId);
-        setWorkLevel(isUndefined(candidate.workLevelId)?0:candidate.workLevelId)
-        setExperience(isUndefined(candidate.experience)?0:candidate.experience);
-        setJobTypeId(isUndefined(candidate.jobTypeId)?0:candidate.jobTypeId)
-        setCityId(isUndefined(candidate.cityId)?0:candidate.cityId)
+        setMinWage(isUndefined(candidate.minWage) ? 0 : candidate.minWage);
+        setWorkField(isUndefined(candidate.workFieldId) ? 0 : candidate.workFieldId);
+        setWorkLevel(isUndefined(candidate.workLevelId) ? 0 : candidate.workLevelId)
+        setExperience(isUndefined(candidate.experience) ? 0 : candidate.experience);
+        setJobTypeId(isUndefined(candidate.jobTypeId) ? 0 : candidate.jobTypeId);
+        setCityId(isUndefined(candidate.cityId) ? 0 : candidate.cityId);
+        if(!isUndefined(candidate.Keywords) && candidate.Keywords.length>0){
+            const tagList = candidate.Keywords.map((kw)=>{
+                return kw.keywordText;
+            })
+            setTags(tagList);
+        }
     }, [candidate]);
     useEffect(() => {
     }, []);
@@ -37,14 +51,15 @@ const SettingForm = ({ candidate, cityList, workFieldList, workLevelList, jobTyp
             const fullName = localStorage.getItem("fullName");
             await updateCandidate({
                 fullName,
-                cityId,
+                cityId: parseInt(cityId),
                 isSeeking,
                 isAcceptEmail,
-                minWage,
-                workFieldId,
-                workLevelId,
-                experience,
-                jobTypeId
+                minWage: parseInt(minWage),
+                workFieldId: parseInt(workFieldId),
+                workLevelId: parseInt(workLevelId),
+                experience: parseInt(experience),
+                jobTypeId: parseInt(jobTypeId),
+                tags
             });
             toast.success("Cập nhật cài đặt thành công!", {
                 position: toast.POSITION.TOP_RIGHT,
@@ -85,7 +100,7 @@ const SettingForm = ({ candidate, cityList, workFieldList, workLevelList, jobTyp
                 </div>
                 <div className="input-div">
                     <div className="checkbox-container">
-                        <label htmlFor="isAcceptEmail">Nhận email thông báo:</label>
+                        <label htmlFor="isAcceptEmail">Nhận email gợi ý việc làm:</label>
                         <input
                             className="check-input"
                             type="checkbox"
@@ -99,18 +114,18 @@ const SettingForm = ({ candidate, cityList, workFieldList, workLevelList, jobTyp
                     </div>
                 </div>
                 <div className="input-div">
-                        <label htmlFor="city">Thành phố:</label>
-                        <select id="city" 
-                        value={cityId} 
+                    <label htmlFor="city">Thành phố:</label>
+                    <select id="city"
+                        value={cityId}
                         onChange={(e) => setCityId(e.target.value)}>
-                            {cityList.map((city) => (
-                                <option key={city.cityId} value={city.cityId}>
-                                    {city.cityName}
-                                </option>
-                            ))}
-                        </select>
+                        {cityList.map((city) => (
+                            <option key={city.cityId} value={city.cityId}>
+                                {city.cityName}
+                            </option>
+                        ))}
+                    </select>
 
-                    </div>
+                </div>
                 <div className="input-div">
                     <label htmlFor="minWage">Mức lương tối thiểu (triệu đồng):</label>
                     <input
@@ -176,6 +191,16 @@ const SettingForm = ({ candidate, cityList, workFieldList, workLevelList, jobTyp
                             </option>
                         ))}
                     </select>
+                </div>
+                <div className="input-div">
+                    <label>Từ khóa</label>
+                    <div>
+                        <TagsInput
+                            value={tags}
+                            onChange={handleChangeTags}
+                            inputProps={{ placeholder: 'Thêm tags' }}
+                        />
+                    </div>
                 </div>
                 <button id="btnSubmitSetting" type="submit" disabled={isSubmitting}>Lưu cài đặt</button>
             </form>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { format } from "date-fns";
 import { getApplyByJob } from "../../apis/applyJob.js";
 import { getJob } from "../../apis/job.js"
 import { useParams, useNavigate, NavLink } from 'react-router-dom';

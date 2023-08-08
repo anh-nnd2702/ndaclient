@@ -14,15 +14,6 @@ const LoginScene = ({onLogin}) => {
     }
   }, []);
 
-  /*useEffect(()=>{
-    if (checkUserLoggedIn()) {
-      navigate('/'); 
-    }
-    else if(checkHrLoggedIn()){
-      navigate('/companyDashboard')
-    }
-  },[isLoggedIn, isLoggedInHr])*/
-
   const checkHrLoggedIn = () => {
     const isLogInHr = localStorage.getItem('isLoggedInHr');
     return isLogInHr === 'true'|| isLogInHr === true;
@@ -35,8 +26,8 @@ const LoginScene = ({onLogin}) => {
   return (
     <div className='login-box'>
       <h1>Chào mừng bạn quay trở lại</h1>
-      <img id='appLogoLogin' alt='appLogo' src="https://drive.google.com/uc?export=view&id=1vJ_eEMn2mcKKpjpwwrc2uRvMbwzscJ9T"></img>
-      <LoginForm onLogin={onLogin}/>
+      <img id='appLogoLogin' alt='appLogo' src="https://drive.google.com/uc?export=view&id=1uO7HR_nxudpgsJPRWcPj1Wdu9YVV7PCr"></img>
+      <LoginForm onLogin={onLogin} isAminLogin={false}/>
       <div className='signup-option'>
         <p>Bạn chưa có tài khoản?</p>
         <NavLink to={"/signup"}>Đăng ký ngay</NavLink>

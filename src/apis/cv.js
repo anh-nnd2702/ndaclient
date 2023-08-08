@@ -120,4 +120,24 @@ export const deleteCvById = async (cvId) =>{
         throw error;
       }
 }
-  
+
+export const getAllCv = async () =>{
+  try {
+    const token = Cookies.get('token');
+    
+    const result = await axios.get(`${DOMAIN}/cv/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (result.status === 200) {
+      return result.data.cvList;
+    } else {
+      throw new Error('Cannot get cv:', result.status);
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

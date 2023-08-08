@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { format } from "date-fns";
-import { Navigate, NavLink, useNavigate } from 'react-router-dom';
-import { updateApplyStatus, getApplyById, getApplyByJob } from "../../apis/applyJob.js"
-import { getAllCompanyJobs } from "../../apis/job.js";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { deleteJob, getAllCompanyJobs } from "../../apis/job.js";
 import JobChart from '../../components/jobChart.jsx';
 import "./dashboard.css"
 import { toast } from 'react-toastify';
@@ -59,13 +57,32 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
         }
     }
 
-    /*useEffect(() => {
-        fetchDataDashBoard()
-    }, [isLoggedInHr])
-    */
+    const handleDeleteJob = async (jobId) => {
+        try {
+            const result = await deleteJob(jobId);
+            if (result) {
+                toast.success("Tin đã bị xóa!", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 900,
+                });
+                const updatedList = jobList.filter((job)=>{
+                    return (job.jobId !== jobId)
+                })
+                setJobList(updatedList);
+            }
+        }
+        catch (error) {
+            toast.error("Có lỗi xảy ra khi xóa tin!", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 900,
+            });
+        }
+    }
+
     useEffect(() => {
         fetchDataDashBoard()
     }, [])
+
     return (
         <div className='dashboard'>
             <h1>Bảng tin nhà tuyển dụng</h1>
@@ -86,11 +103,7 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
                                             <h3>ID-{job.jobId}: {job.jobTitle}</h3>
                                             {!checkExpired(job.expireDate) ?
                                                 (<button type='button' onClick={() => navigate(`/updateJob/${job.jobId}`)} className='update-job-btn'><i className='fa-solid fa-pen'></i></button>
-                                                ) : (<button type='button' onClick={() => toast.error('Tin đã hết hạn',
-                                                    {
-                                                        position: toast.POSITION.TOP_RIGHT,
-                                                        autoClose: 500,
-                                                    })} className='update-job-btn-red'><i className='fa-solid fa-wrench'></i></button>)}
+                                                ) : (<button type='button' onClick={() => handleDeleteJob(job.jobId)} className='update-job-btn-red'><i className='fa-solid fa-trash'></i></button>)}
                                         </div>
                                         <div className='job-dates'>
                                             <p className='date-live'>Đăng {formatModifiedTime(job.modifiedTime)}</p>
@@ -102,7 +115,7 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
 
                                         </div>
                                         <div className='job-count'>
-                                            {job.hireCount > 0 ? (
+                                            {(job.hireCount > 0) ? (
                                                 <p>Số lượng cần tuyển: {job.hireCount}</p>) : (
                                                 <p>Số lượng tuyển: Không giới hạn</p>
                                             )}
@@ -138,15 +151,15 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
                     <h2>{companyName}</h2>
                     <div className='company-job-count'>
                         <h4>Bạn có {jobList.length} tin tuyển dụng</h4>
-                        {expiredCount == 0 ? (
+                        {expiredCount === 0 ? (
                             <h5 className='no-expire'>Tất cả đều còn hạn</h5>
                         ) : (
                             <h5 className='has-expire'>Trong đó {expiredCount} tin đã hết hạn</h5>
                         )}
                     </div>
                     <div>
-                    <h1>Biểu đồ số lượt ứng tuyển</h1>
-                    <JobChart data={jobList} />
+                        <h1>Biểu đồ số lượt ứng tuyển</h1>
+                        <JobChart data={jobList} />
                     </div>
                 </div>
             </div>

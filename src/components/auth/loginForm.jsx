@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../validations/email.js';
 import "./loginForm.css"
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({ onLogin, isAminLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,7 +26,12 @@ const LoginForm = ({ onLogin }) => {
     setError('');
 
     try {
-      await onLogin(email, password, isHr, navigate);
+      if(isAminLogin){
+        await onLogin(email, password, navigate);
+      }
+      else{
+        await onLogin(email, password, isHr, navigate);
+      }
     } catch (error) {
       console.log(error)
       setError(
@@ -51,13 +56,13 @@ const LoginForm = ({ onLogin }) => {
           <NavLink to="/forgotpassword">Quên mật khẩu</NavLink>
         </div>
       </div>
-      <div>
+      {!isAminLogin && <div>
         <label style={{marginLeft: "30px", paddingLeft:"30px"}}><input
           type="checkbox"
           checked={isHr}
           onChange={(e) => setIsHr(e.target.checked)}
         ></input>Tôi là nhà tuyển dụng</label>
-      </div>
+      </div>}
 
       <button type="submit" id='btnLogin'>Đăng nhập</button>
     </form>

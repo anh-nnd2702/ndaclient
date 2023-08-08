@@ -1,8 +1,11 @@
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 import React, { useRef, useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { createHrSocketConnection, createCandSocketConnection, disconnectSocket, listenApplyNotifications, listenCompanyNotifications, checkConnectionStatus } from './utils/socket.js';
-import { logout, signUp, login, signUpCompany, loginCompany, logoutHr } from './apis/auth';
+import {
+  createHrSocketConnection, createCandSocketConnection, disconnectSocket,
+  createAdminSocketConnection, listenApplyNotifications, listenCompanyNotifications,
+  checkConnectionStatus, listenAdminNotifications
+} from './utils/socket.js';
+import { logout, signUp, login, signUpCompany, loginCompany, logoutHr, loginAdmin, logoutAdmin } from './apis/auth';
 import DOMAIN from './config';
 import Header from './containers/header/Header';
 import CandidateHeader from './containers/header/candidateHeader';
@@ -29,10 +32,16 @@ import CompanyProfileScene from './scenes/companyProfile/companyProfile'
 import UpdateJobScene from './scenes/updateJob/updateJob';
 import UpdateCvScene from './scenes/updateCv/updateCv';
 import CandidateApplication from './scenes/viewApplication/candidateApplication';
+import AdminDashboard from './scenes/adminDashboard.jsx';
+import AdminLogin from './scenes/adminLogin.jsx';
+import AdminHeader from './containers/header/adminHeader.jsx';
+import ResetPassword from './scenes/auth/resetPassword.jsx';
+
 import './App.css';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CompanyInfor from './scenes/companyInfor/companyInfor.jsx';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,11 +51,14 @@ function App() {
   const socketRef = useRef(null);
   const [companyNotifi, setCompanyNotifi] = useState([]);
   const [candidateNotifi, setCandidateNotifi] = useState([]);
+  const [adminNotifi, setAdminNotifi] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   useEffect(() => {
     checkLoginStatus();
     checkLoginHrStatus();
-    const companyId = localStorage.getItem('companyId'); // Lấy companyId từ localStorage
-    const isConnected = checkConnectionStatus(); // Kiểm tra trạng thái kết nối
+    const companyId = localStorage.getItem('companyId');
+    const isConnected = checkConnectionStatus();
     if (isLoggedInHr && !isConnected) {
       const socket = createHrSocketConnection(DOMAIN, companyId);
       if (socket) {
@@ -84,6 +96,27 @@ function App() {
 
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    checkLoginAdminStatus();
+    const adminId = 'admin123';
+    const isConnected = checkConnectionStatus();
+    if (isAdmin && !isConnected) {
+      const socket = createAdminSocketConnection(DOMAIN, adminId);
+      if (socket) {
+        listenAdminNotifications(socket, handleAdminNotification);
+        setSocket(socket);
+        socketRef.current = socket;
+      }
+    }
+    return () => {
+      if (socketRef.current) {
+        disconnectSocket(socketRef.current);
+        socketRef.current = null;
+      }
+    };
+
+  }, [isAdmin]);
+
   const checkLoginHrStatus = () => {
     const isLoggedInHr = localStorage.getItem('isLoggedInHr') === 'true';
     setIsLoggedInHr(isLoggedInHr);
@@ -92,6 +125,11 @@ function App() {
   const checkLoginStatus = () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(isLoggedIn);
+  };
+
+  const checkLoginAdminStatus = () => {
+    const isLoggedIn = localStorage.getItem('isAdmin') === 'true';
+    setIsAdmin(isLoggedIn);
   };
 
   const handleCompanyNotification = (data) => {
@@ -106,27 +144,37 @@ function App() {
     console.log('Received notification:', data);
   };
 
+  const handleAdminNotification = (data) => {
+    setAdminNotifi((prevNotifi) => [...prevNotifi, data]);
+    console.log(adminNotifi);
+    console.log('Received notification:', data);
+  };
+
   const handleSignUp = async (fullName, email, password, isHr, navigate) => {
     try {
       if (isHr) {
         const companyName = fullName;
         const companyPass = password;
         const infor = await signUpCompany(companyName, email, companyPass);
-        setIsLoggedInHr(true);
-        navigate("/companyProfile");
-        toast.success('Đăng kí thành công', {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 800,
-        });
+        if (infor) {
+          setIsLoggedInHr(true);
+          navigate("/companyProfile");
+          toast.success('Đăng kí thành công', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 800,
+          });
+        }
       }
       else {
         const infor = await signUp(fullName, email, password);
-        setIsLoggedIn(true);
-        navigate(-1);
-        toast.success('Đăng kí thành công', {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 800,
-        });
+        if (infor) {
+          setIsLoggedIn(true);
+          navigate(-1);
+          toast.success('Đăng kí thành công', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 800,
+          });
+        }
       }
     } catch (error) {
       toast.error(`Đăng ký thất bại: ${error}`, {
@@ -141,13 +189,14 @@ function App() {
       if (isHr) {
         const companyPass = password;
         const infor = await loginCompany(email, companyPass);
-        navigate("/companyDashboard");
-        toast.success('Đăng nhập thành công', {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 800,
-        });
+
         if (infor) {
           setIsLoggedInHr(true);
+          navigate("/companyDashboard");
+          toast.success('Đăng nhập thành công', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 800,
+          });
           return () => {
             disconnectSocket(socket);
           };
@@ -155,13 +204,13 @@ function App() {
       }
       else {
         const infor = await login(email, password);
-        navigate('/');
-        toast.success('Đăng nhập thành công', {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 800,
-        });
         if (infor) {
           setIsLoggedIn(true);
+          navigate('/');
+          toast.success('Đăng nhập thành công', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 800,
+          });
           return () => {
             disconnectSocket(socket);
           };
@@ -169,6 +218,24 @@ function App() {
       }
 
     } catch (error) {
+      throw error;
+    }
+  }
+
+  const handleAdminLogin = async (email, password, navigate) => {
+    try {
+      const adminPass = password;
+      const infor = await loginAdmin(email, adminPass);
+      if (infor) {
+        setIsAdmin(true);
+        navigate("/admin");
+        toast.success('Đăng nhập thành công', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 800,
+        });
+      }
+    }
+    catch (error) {
       throw error;
     }
   }
@@ -242,15 +309,40 @@ function App() {
     }
   };
 
+  const handleAdminLogout = async (navigate) => {
+    try {
+      const loggedout = await logoutAdmin();
+      if (loggedout) {
+        if (checkConnectionStatus()) {
+          disconnectSocket(socket);
+        }
+        setIsAdmin(false);
+        toast.success('Bạn đã đăng xuất', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        });
+        navigate('/');
+      }
+    }
+    catch (error) {
+      console.log(error);
+      toast.error('Có lỗi xảy ra trong quá trình đăng xuất', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1000,
+      });
+    }
+  }
+
   return (
     <div className='app'>
       <Router>
         {isLoggedIn && <CandidateHeader notifications={candidateNotifi} handleClickNoti={handleReadCandidateNoti} onLogout={handleLogout} changeProfile={handleChangeProfile} isLoggedIn={isLoggedIn} />}
         {isLoggedInHr && <CompanyHeader notifications={companyNotifi} handleClickNoti={handleReadCompanyNoti} onLogout={handleLogout} changeProfile={handleChangeProfile} isLoggedInHr={isLoggedInHr} />}
-        {(!isLoggedIn && !isLoggedInHr) && <Header />}
+        {(!isLoggedIn && !isLoggedInHr && !isAdmin) && <Header />}
+        {isAdmin && <AdminHeader isAdmin={isAdmin} onLogout={handleAdminLogout} />}
         <Routes>
-          <Route exact path='/' element={<AllJob isHr={isLoggedInHr}/>} />
-          <Route path='/login' element={<LoginScene onLogin={handleLogin}/>} />
+          <Route exact path='/' element={<AllJob isHr={isLoggedInHr} />} />
+          <Route path='/login' element={<LoginScene onLogin={handleLogin} />} />
           <Route path='/company' element={<AllCompany />} />
           <Route path='/setting' element={<SettingScene isLoggedIn={isLoggedIn} />} />
           <Route path='/signup' element={<SignUpScene onSignUp={handleSignUp} />} />
@@ -271,6 +363,10 @@ function App() {
           <Route path='/updateJob/:jobId' element={<UpdateJobScene isLoggedInHr={isLoggedInHr} />} />
           <Route path='/updateCv/:cvId' element={<UpdateCvScene isLoggedIn={isLoggedIn} />} />
           <Route path='candidateApplication/:applyId' element={<CandidateApplication isLoggedIn={isLoggedIn} />} />
+          <Route path='/admin' element={<AdminDashboard isAdmin={isAdmin} />} />
+          <Route path='/adminLogin' element={<AdminLogin onLogin={handleAdminLogin} />} />
+          <Route path='/company/:companyId' element={<CompanyInfor />} />
+          <Route path='/candidate/resetPassword/:token' element={<ResetPassword/>}/>
         </Routes>
       </Router>
       <ToastContainer />

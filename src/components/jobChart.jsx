@@ -10,7 +10,7 @@ const JobChart = ({ data }) => {
     const jobs = data.filter(job =>{
         return !checkExpired(job.expireDate);
     })
-  const jobId = jobs.map(job => `Id tin: ${job.jobId}`);
+  const jobId = jobs.map(job => `Id- ${job.jobId}`);
   const appliedCount = jobs.map(job => job.AppliedCount);
   const newAppliedCount = jobs.map(job => job.newAppliedCount);
   const seenAppliedCount = jobs.map(job => job.seenAppliedCount);
@@ -30,6 +30,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: '#60A3D9',
         hoverBorderColor: 'rgba(75,192,192,1)',
         data: appliedCount,
+    
       },
       {
         label: 'Ứng tuyển mới',
@@ -39,6 +40,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
         data: newAppliedCount,
+     
       },
       {
         label: 'Ứng tuyển đã xem',
@@ -48,6 +50,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(54,162,235,0.4)',
         hoverBorderColor: 'rgba(54,162,235,1)',
         data: seenAppliedCount,
+ 
       },
       {
         label: 'Số ứng viên đã loại',
@@ -57,6 +60,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(255,206,86,0.4)',
         hoverBorderColor: 'rgba(255,206,86,1)',
         data: rejectedAppliedCount,
+     
       },
       {
         label: 'Số ứng viên phù hợp',
@@ -66,23 +70,33 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(153,102,255,0.4)',
         hoverBorderColor: 'rgba(153,102,255,1)',
         data: acceptedAppliedCount,
+    
       },
     ],
   };
 
   const chartOptions = {
+    indexAxis: 'x',
     scales: {
-      x: {
-        type: 'category',
-        labels: jobId,
-      },
       y: {
         stacked: false,
         ticks: {
-            stepSize: 1, // Định dạng số nguyên trên trục y
-            beginAtZero: true // Bắt đầu từ số 0
+          stepSize: 1,
+          beginAtZero: true,
+          font: {
+            size: 18
           }
-    },
+        },
+      },
+      x: {
+        type: 'category',
+        labels: jobId,
+        ticks: {
+          font: {
+            size: 18
+          }
+        }
+      },
     },
   };
 
@@ -96,7 +110,6 @@ const JobChart = ({ data }) => {
       options: chartOptions,
     });
 
-    // Clean up: Xóa biểu đồ khi component unmount
     return () => {
       chartRef.destroy();
     };
@@ -104,8 +117,7 @@ const JobChart = ({ data }) => {
 
   return (
     <div className='job-chart'>
-      {/* Sử dụng một div mới cho mỗi biểu đồ */}
-      <div style={{ position: 'relative', width: '95%', height: '500px' }}>
+      <div style={{ position: 'relative', width: '95%', height: 'fit-content' }}>
         <canvas id="jobChartCanvas" />
       </div>
     </div>

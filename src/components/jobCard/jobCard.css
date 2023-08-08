@@ -5,12 +5,16 @@
     width: 100%;
     margin: 20px 0px;
     border-radius: 5px;
-    background-color: gainsboro;
-    border: solid 2px #BFD7ED;
+    background-color: #f3f5f7;
+    border: solid 2px gainsboro;
+}
+
+.job-card:hover{
+    border: solid 2px #60A3D9;
 }
 
 .job-left {
-    width: 20%;
+    width: 180px;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -20,7 +24,7 @@
 
 .job-left img {
     object-fit: contain;
-    max-width: 200px;
+    max-width: 170px;
     border: solid 1px #BFD7ED;
     border-radius: 5px;
     aspect-ratio: 1;
@@ -29,7 +33,8 @@
 .job-right {
     display: flex;
     flex-direction: column;
-    width: 95%;
+    width: calc(100% - 180px);
+    margin-left: 10px;
 }
 
 .card-head {
@@ -71,10 +76,14 @@
     font-size: 1.1em;
 }
 
+.job-company-name{
+    text-decoration: none;
+}
+
 .job-tags {
     display: flex;
     flex-direction: row;
-    margin: 0px 20px 10px 10px;
+    margin: auto 20px 15px 10px;
     justify-content: space-between;
 }
 
