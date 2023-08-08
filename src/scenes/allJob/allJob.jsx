@@ -28,6 +28,12 @@ const AllJob = ({ isHr }) => {
         if (isHr) {
             navigate('/companyDashboard');
         }
+        else{
+            const isAdmin = localStorage.getItem("isAdmin") === true || localStorage.getItem("isAdmin") === "true";
+            if (isAdmin) {
+                navigate("/admin");
+            }
+        }
     }, []);
 
     const expList = [

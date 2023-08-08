@@ -4,7 +4,8 @@ import "../jobByCompany/jobByCompany";
 import { getCandidateCv } from "../../apis/candidate.js";
 import { NavLink, useNavigate } from "react-router-dom";
 const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
-    company, isLoggedIn, isApplied, onApply, onSaveJob, onUnsaveJob, isSaved, onReport }) => {
+    company, isLoggedIn, isApplied, onApply, onSaveJob, onUnsaveJob, isSaved, onReport, isAdmin,
+    onBlockJob, onPassReports }) => {
     let wage = "";
     let gender = "";
     const navigate = useNavigate();
@@ -88,7 +89,27 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
         wage = `Thỏa thuận`;
     }
 
+    function formatModifiedTime(modifiedDate) {
+        const date = new Date(modifiedDate);
 
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        const formattedDate = `Ngày: ${day}/${month}/${year} lúc ${hours}:${minutes}`;
+        return formattedDate;
+    }
+
+    const handleBlockJob = async (jobId) => {
+        try {
+            await onBlockJob(jobId)
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleSubmitApply = async (e) => {
         e.preventDefault();
@@ -108,6 +129,15 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
     const handleLogintoApply = () => {
         if (!isLoggedIn) {
             navigate('/login')
+        }
+    }
+
+    const handlePassAllReports = (jobId) => {
+        try {
+            const result = onPassReports(jobId);
+        }
+        catch (error) {
+            console.log(error);
         }
     }
 
@@ -138,20 +168,45 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                             (<button type="button" id="btnSave" onClick={handleSaveJob}><i className="fa-regular fa-heart"></i> Lưu tin</button>
                             ) : (
                                 <div>
-                                    <p className="saved-p">Tin đã lưu</p>
+                                    <p className="saved-p">Đã lưu</p>
                                     <button type="button" id="btnUnSave" onClick={handleUnSaveJob}><i className="fa-regular fa-heart"></i> Bỏ lưu</button>
                                 </div>
                             )
 
                         }
                     </div>
-                ) : (
+                ) : ((!isAdmin) &&
                     <div className="job-header_action">
                         <button className="btn-login" type="button" onClick={handleLogintoApply}>Đăng nhập</button>
                     </div>
                 )}
 
             </div>
+            {isAdmin && (
+                <div className="admin-action-box">
+                    {(job.ReportJobs && job.ReportJobs.length > 0) ? (
+                        <div>
+                            <h3>Tin tuyển dụng này có: {job.ReportJobs.length} lượt báo cáo</h3>
+                            <h4>Nội dung báo cáo:</h4>
+                            {job.ReportJobs.map((rp) => (
+                                <div key={rp.reportId}>
+                                    <span>{formatModifiedTime(rp.reportTime)}</span>
+                                    <p>{rp.reportDescribe}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <h3>Chưa có báo cáo nào về tin tuyển dụng này!</h3>
+                    )}
+                    {!(job.isActive)&& <h3>Bạn đã ẩn tin này!</h3>}
+                    {(job.ReportJobs && job.ReportJobs.length > 0 && job.isActive) && (
+                        <div>
+                            <button type="button" onClick={() => handleBlockJob(job.jobId)}><i className="fa-solid fa-eye-slash"></i>   Ẩn tin này</button>
+                            <button type="button" onClick={() => handlePassAllReports(job.jobId)}>Bỏ qua báo cáo</button>
+                        </div>
+                    )}
+                </div>
+            )}
             <div className="section-choices">
                 <div><a href="#Jobdetail">Chi tiết tin</a></div>
                 <div><a href="#CompanyDetail">Thông tin công ty</a></div>
@@ -185,21 +240,21 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                     </div>
                     <div className="description-infor">
                         <h1 className="section-header">Chi tiết công việc</h1>
-                        <div>
+                        <div className="jd-box">
                             <h3 className="jd-header">Mô tả công việc:</h3>
-                            <p>{job.jobDescribe}</p>
+                            <span className="span-job">{job.jobDescribe}</span>
                         </div>
 
                         {job.jobRequire && (
-                            <div>
+                            <div className="jd-box">
                                 <h3 className="jd-header">Yêu cầu ứng viên:</h3>
-                                <p>{job.jobRequire}</p>
+                                <span className="span-job">{job.jobRequire}</span>
                             </div>)
                         }
                         {job.jobBenefit && (
-                            <div>
+                            <div className="jd-box">
                                 <h3 className="jd-header">Quyền lợi:</h3>
-                                <p>{job.jobBenefit}</p>
+                                <span className="span-job">{job.jobBenefit}</span>
                             </div>)
                         }
                     </div>
@@ -231,7 +286,7 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
 
                                     }
                                 </div>
-                            ) : (
+                            ) : ((!isAdmin) &&
                                 <div className="action-btn-box">
                                     <p className="applied-p">Hãy đăng nhập ngay để ứng tuyển</p>
                                     <button className="btn-login" type="button" onClick={handleLogintoApply}>Đăng nhập</button>
@@ -239,8 +294,8 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                             )}
                             {isLoggedIn && (
                                 <div>
-                                    <h4><i className="fa-solid fa-triangle-exclamation"></i>   Báo cáo tin tuyển dụng: Nếu bạn thấy tin tuyển dụng này có dấu hiệu lừa đảo:</h4>
-                                    <button onClick={() => setIsReport(true)}>Phản ánh tin tuyển dụng</button>
+                                    <h4>Báo cáo tin tuyển dụng: Nếu bạn thấy tin tuyển dụng này có dấu hiệu lừa đảo:</h4>
+                                    <button onClick={() => setIsReport(true)}><i className="fa-solid fa-triangle-exclamation"></i>  Báo cáo tin</button>
                                 </div>
                             )}
                         </div>

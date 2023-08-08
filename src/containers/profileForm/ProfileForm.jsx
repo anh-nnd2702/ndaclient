@@ -41,9 +41,6 @@ const ProfileForm = ({ candidate, cityList, onProfileUpdate }) => {
         }
     };
 
-    const handleCityIdChange = (e) => {
-        setCityId(e.target.value);
-    }
     const handleFullNameChange = (e) => {
         setFullName(e.target.value);
     };

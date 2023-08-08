@@ -6,9 +6,11 @@ const AllCompany = () => {
     const [companyList, setCompanyList] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
+    const [isAdmin, setIsAdmin] = useState(false);
+
     const fetchListCompany = async (keyword) => {
         try {
-            const listCompany = await getAllCompany(keyword);
+            const listCompany = await getAllCompany(keyword, checkIsAdmin());
             setCompanyList(listCompany);
         }
         catch (error) {
@@ -17,7 +19,32 @@ const AllCompany = () => {
         }
     }
 
+    const checkIsAdmin = () => {
+        const adminLoggedIn = localStorage.getItem("isAdmin");
+        return (adminLoggedIn === true || adminLoggedIn === "true")
+    }
+
+    const checkCompanyStatus = (isActive, isGranted) =>{
+        if(isActive){
+            if(isGranted){
+                return "Đã kiểm duyệt"
+            }
+            else{
+                return "Mới đăng ký"
+            }
+        }
+        else{
+            if(isGranted){
+                return "Đã bị khóa"
+            }
+            else{
+                return "Duyệt không qua"
+            }
+        }
+    }
+
     useEffect(() => {
+        setIsAdmin(checkIsAdmin())
         const keyword = "";
         fetchListCompany(keyword);
     }, []);
@@ -41,10 +68,15 @@ const AllCompany = () => {
                         <div>
                             <img src={company.companyLogo}></img>
                         </div>
-                        <h3>{company.companyName}</h3>
-                        <span>Địa chỉ: </span>
-                        <span>{company.City.cityId > 0 && company.City.cityName} - {company.companyAddress}</span>
-                        <p>{company.companyIntro}</p>
+                        <div>
+                            <div>
+                                <h3><NavLink to={`/company/${company.Id}`}>{company.companyName}</NavLink></h3>
+                                <span>{checkCompanyStatus(company.isActive, company.isGranted)}</span>
+                            </div>
+                            <span>Địa chỉ: </span>
+                            <span>{company.City.cityId > 0 && company.City.cityName} - {company.companyAddress}</span>
+                            <p>Giới thiệu: {(company.companyIntro) ? (` ${company.companyIntro}`) : (` Chưa có thông tin`)}</p>
+                        </div>
                     </div>
                 ))}
             </div>

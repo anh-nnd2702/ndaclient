@@ -13,9 +13,9 @@ export const getAllJobs = async (filterParams) =>{
     }
 }
 
-export const getJob = async (jobId) =>{
+export const getJob = async (jobId, isAdmin) =>{
     try{
-        const result = await axios.get(`${DOMAIN}/job/`+jobId);
+        const result = await axios.get(`${DOMAIN}/job/`+jobId, {params: {isAdmin}});
         const job = result.data.job
         return job;
     }
@@ -81,6 +81,40 @@ export const updateJob = async (formData, jobId) =>{
             },
         });
         return result.data.job;
+    }
+    catch(error){
+        console.log(error);
+        throw error;
+    }
+}
+
+export const deleteJob = async (jobId) =>{
+    const token = Cookies.get('token');
+    try{
+        const result = await axios.delete(`${DOMAIN}/job/`+jobId,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return result.data;
+    }
+    catch(error){
+        console.log(error);
+        throw error;
+    }
+}
+
+export const updateJobStatus = async (jobId, formData) =>{
+    const token = Cookies.get('token');
+    try{
+        const result = await axios.put(`${DOMAIN}/job/status/`+jobId, formData,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return result.data;
     }
     catch(error){
         console.log(error);

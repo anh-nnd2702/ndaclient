@@ -5,7 +5,7 @@
 .job-detail-header{
     display: flex;
     flex-direction: row;
-    max-height: 150px;
+    height: fit-content;
     padding: 10px 0px;
     border-radius: 10px;
     background-color: #fff;
@@ -182,11 +182,13 @@
 }
 
 .description-infor{
-    padding: 15px 0px;
+    padding: 15px 10px;
 }
 
-.description-infor p {
-    margin: 5px 4%;
+.description-infor span {
+    margin: 5px 0px;
+    padding-left: 0px;
+    white-space: pre-line;
 }
 
 .job-action{
@@ -221,10 +223,15 @@
     color: #003B73;
 }
 
+.jd-box{
+    padding-left: 40px;
+    padding-right: 20px;
+}
+
 .jd-header{
     color: #0074B7;
-    margin: 10px 30px;
-    padding: 10px 20px;
+    margin: 10px 0px;
+    padding: 0px;
 }
 
 .apply-box{

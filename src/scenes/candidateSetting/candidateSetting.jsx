@@ -12,54 +12,50 @@ const SettingScene = ({ isLoggedIn }) => {
     const [workFieldList, setWorkFieldList] = useState([]);
     const [jobTypeList, setJobTypeList] = useState([]);
     const [eduLevelList, setEduLevelList] = useState([]);
-    
+
     useEffect(() => {
         checkLoginStatus();
     }, [isLoggedIn]);
-    
+
     const checkLoginStatus = async () => {
-        if (!isLoggedIn) {
-            const hasLog = localStorage.getItem("isLoggedIn") === 'true' || localStorage.getItem("isLoggedIn") === true;
-            if (!hasLog) {
-                navigate('/login');
-            }
-            else {
-                fetchCandidateData();
-                fetchReference();
-            }
-        } else {
+        const hasLog = localStorage.getItem("isLoggedIn") === 'true' || localStorage.getItem("isLoggedIn") === true;
+        if (!hasLog) {
+            navigate('/login');
+        }
+        else {
             fetchCandidateData();
             fetchReference();
         }
+    
+}
+
+const fetchCandidateData = async () => {
+    try {
+        const candidate = await getCandidate();
+        setCandidateSetting(candidate);
+    } catch (error) {
+        console.error('There was an error fetching candidate data:', error);
     }
+};
 
-    const fetchCandidateData = async () => {
-        try {
-            const candidate = await getCandidate();
-            setCandidateSetting(candidate);
-        } catch (error) {
-            console.error('There was an error fetching candidate data:', error);
-        }
-    };
-
-    const fetchReference = async () => {
-        try {
-            const reference = await getReference();
-            setCityList(reference.city);
-            setWorkFieldList(reference.workField);
-            setWorkLevelList(reference.workLevel);
-            setJobTypeList(reference.jobType);
-            setEduLevelList(reference.educationLevel);
-        } catch (error) {
-            console.error('There was an error fetching reference data:', error);
-        }
+const fetchReference = async () => {
+    try {
+        const reference = await getReference();
+        setCityList(reference.city);
+        setWorkFieldList(reference.workField);
+        setWorkLevelList(reference.workLevel);
+        setJobTypeList(reference.jobType);
+        setEduLevelList(reference.educationLevel);
+    } catch (error) {
+        console.error('There was an error fetching reference data:', error);
     }
+}
 
-    return (
-        <div>
-            <SettingForm candidate={candidateSetting} cityList={cityList} workFieldList={workFieldList} workLevelList={workLevelList} jobTypeList={jobTypeList}/>
-        </div>
-    )
+return (
+    <div>
+        <SettingForm candidate={candidateSetting} cityList={cityList} workFieldList={workFieldList} workLevelList={workLevelList} jobTypeList={jobTypeList} />
+    </div>
+)
 }
 
 export default SettingScene;

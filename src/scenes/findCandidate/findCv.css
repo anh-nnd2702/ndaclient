@@ -1,0 +1,78 @@
+.find-cv-body{
+    width: 80vw;
+    padding: 0px;
+    background-color: #fff;
+    border-radius: 20px;
+    margin: 30px 10vw;
+}
+
+.find-cv-body h1{
+    background-color: #003B73;
+    padding: 10px 20px;
+    color: #fff;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px ;
+    text-align: center;
+}
+
+.cv-filter-box{
+    margin-left: 0px;
+    width: 30%;
+}
+
+#keyword, #skill{
+    padding: 5px;
+    width: 95%;
+}
+
+.btn-box{
+    margin-top: 15px;
+}
+
+.search-body{
+    display: flex;
+    flex-direction: row;
+}
+
+.cv-list{
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    margin-left: 5%;
+    padding: 10px;
+}
+
+.cv-card{
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    border: solid 2px gainsboro;
+    padding: 0px 15px;
+    border-radius: 15px;
+}
+
+.cv-card-head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.cv-card h2{
+    margin: 10px 0px;
+    color: #003B73;
+}
+
+.cv-card h3{
+    margin: 10px 0px;
+    color: #60A3D9;
+}
+
+.cv-card h4{
+    margin: 10px 0px;
+}
+
+.cv-card p{
+    margin-top: 0px;
+    margin-bottom: 10px;
+}

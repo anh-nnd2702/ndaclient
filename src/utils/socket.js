@@ -2,6 +2,8 @@ import { io } from 'socket.io-client';
 let isConnected = false;
 let companySocket = null;
 let candidateSocket = null;
+let adminSocket = null;
+
 // Hàm tạo kết nối socket
 export const createHrSocketConnection = (domain, companyId) => {
     if (isConnected) {
@@ -49,6 +51,29 @@ export const createCandSocketConnection = (domain, candidateId) => {
     return candidateSocket;
 };
 
+export const createAdminSocketConnection = (domain, adminId) => {
+    if (isConnected) {
+        console.log('Socket connection is already established.');
+        return;
+    }
+    const socketId = `admin${adminId}`;
+    adminSocket = io(domain, {
+        query: { adminId },
+        auth: { socketId },
+    });
+
+    adminSocket.on('connect', () => {
+        console.log('Connected to admin namespace');
+    });
+
+    adminSocket.on('disconnect', () => {
+        console.log('Disconnected from admin namespace');
+        isConnected = false;
+    });
+
+    return adminSocket;
+};
+
 // Hàm ngắt kết nối socket
 export const disconnectSocket = (socket) => {
     if (socket) {
@@ -87,3 +112,12 @@ export const listenApplyNotifications = (socket, onNotificationReceived) => {
     });
 };
 
+export const listenAdminNotifications = (socket, onNotificationReceived) => {
+    if (!socket) {
+        return;
+    }
+    socket.on('reportNotification', (data) => {
+        console.log('Received notification:', data);
+        onNotificationReceived(data);
+    });
+};
