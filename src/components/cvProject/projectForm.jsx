@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 
 const ProjectForm = ({ onSubmitProject, onCancel, currentPrj }) => {
   const [prjName, setPrjName] = useState(currentPrj.prjName || "");
-  const [teamSize, setTeamSize] = useState(currentPrj.teamSize || "");
+  const [teamSize, setTeamSize] = useState(currentPrj.teamSize || 1);
   const [startDate, setStartDate] = useState(currentPrj.startDate || "");
   const [endDate, setEndDate] = useState(currentPrj.endDate || "");
   const [prjPosition, setPrjPosition] = useState(currentPrj.prjPosition || "");
   const [prjDescribe, setPrjDescribe] = useState(currentPrj.prjDescribe || "");
   const [isNotEnd, setIsNotEnd] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [validatext, setValidatext] = useState("");
 
   useEffect(() => {
     if (JSON.stringify(currentPrj) === '{}') {
@@ -22,6 +23,10 @@ const ProjectForm = ({ onSubmitProject, onCancel, currentPrj }) => {
 
   const handleSubmitProject = (e) => {
     e.preventDefault();
+    if(isNotEnd){
+      setEndDate(startDate);
+    }
+    if(validateForm()){
     const projectInfo = {
       prjName,
       teamSize,
@@ -36,7 +41,7 @@ const ProjectForm = ({ onSubmitProject, onCancel, currentPrj }) => {
     }
     else {
       onSubmitProject(projectInfo, currentPrj.index)
-    }
+    }}
   };
 
   const resetAllFields = () => {
@@ -53,10 +58,19 @@ const ProjectForm = ({ onSubmitProject, onCancel, currentPrj }) => {
     onCancel();
   };
 
+  const validateForm = () => {
+    if (prjName === "" || prjPosition==="" ||startDate === "" || (endDate === "" && !isNotEnd)) {
+        setValidatext("Vui lòng điền đủ tên dự án, vai trò, ngày bắt đầu và kết thúc");
+        return false;
+    }
+    else return true;
+}
+
   return (
     <div className="pop-up-box">
       <h2>Dự án của bạn</h2>
       <form className="form-popup">
+      <span className="valid-text">{validatext}</span>
         <div className="popup-input-box">
           <label htmlFor="prjName">Tên dự án:</label>
           <input

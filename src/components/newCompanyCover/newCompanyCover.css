@@ -1,0 +1,20 @@
+.cover-box{
+    background-color: gainsboro;
+    width: 100vw;
+    height: 100vh;
+    top: 70px;
+    left: 0;
+    z-index: 199;
+    text-align: center;
+    position: fixed;
+}
+
+.cover-box h2{
+    color: #003B73;
+    position: relative;
+    text-align: center;
+}
+
+.cover-box a{
+    text-align: center;
+}

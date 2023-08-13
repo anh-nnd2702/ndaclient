@@ -25,7 +25,7 @@
 }
 
 .search-btn:hover{
-
+    background-color: #61ba89;
 }
 
 .search-div{
@@ -113,6 +113,11 @@
     background-color: #003B73;
     color: #fff;
     cursor: pointer;
+    border: solid 2px #003B73;
+}
+
+.filter-btn:hover{
+    background-color: #60A3D9;
 }
 
 .search-btn{
@@ -123,4 +128,33 @@
     color: #fff;
     cursor: pointer;
     border: solid 1px #fff;
+}
+
+.match-job-box{
+    width: fit-content;
+    margin: 30px 15vw 20px 15vw;
+    background-color: #fff;
+    padding: 0px;
+    border-radius: 20px;
+    border: solid 2px gainsboro;
+}
+
+.match-job-title{
+    margin: 0px;
+    color: #fff;
+    background-color: #003B73;
+    padding: 10px 10px 10px 60px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.match-job-list {
+    width: calc(70vw - 90px);
+    margin: 10px 30px;
+    padding: 0px 30px;
+}
+
+.non-match-job{
+    margin: 30px;
+    width: calc(70vw - 90px);
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { initializeApp } from "firebase/app";
+/*import { initializeApp } from "firebase/app";
 import { getMessaging } from "firebase/messaging/sw";
 const firebaseConfig = {
   apiKey: "AIzaSyCctqeXKJYZmRLeeoyW9qrA5y9Pq8CMnnc",
@@ -17,7 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
-
+*/
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 
 const ExperienceForm = ({ onSubmitExperience, onCancel, currentExp }) => {
-    const [companyName, setCompanyName] = useState(currentExp.companyName||"");
-    const [position, setPosition] = useState(currentExp.position||"");
-    const [startDate, setStartDate] = useState(currentExp.startDate||"");
-    const [endDate, setEndDate] = useState(currentExp.endDate||"");
-    const [experDescribe, setExperDescribe] = useState(currentExp.experDescribe||"");
+    const [companyName, setCompanyName] = useState(currentExp.companyName || "");
+    const [position, setPosition] = useState(currentExp.position || "");
+    const [startDate, setStartDate] = useState(currentExp.startDate || "");
+    const [endDate, setEndDate] = useState(currentExp.endDate || "");
+    const [experDescribe, setExperDescribe] = useState(currentExp.experDescribe || "");
     const [isNotEnd, setIsNotEnd] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
-    
+    const [validatext, setValidatext] = useState("");
+
     useEffect(() => {
         if (JSON.stringify(currentExp) === '{}') {
             setIsNotEnd(false);
@@ -18,22 +19,27 @@ const ExperienceForm = ({ onSubmitExperience, onCancel, currentExp }) => {
             setIsNotEnd(currentExp.startDate === currentExp.endDate);
         }
     }, [currentExp])
-    
+
     const handleSubmitExperience = (e) => {
         e.preventDefault();
-        const experienceInfo = {
-            companyName,
-            position,
-            startDate,
-            endDate: isNotEnd ? (startDate) : (endDate),
-            experDescribe,
-        };
-        if (!isUpdate) {
-            onSubmitExperience(experienceInfo, -1);
-            resetAllFields();
+        if (isNotEnd) {
+            setEndDate(startDate);
         }
-        else {
-            onSubmitExperience(experienceInfo, currentExp.index)
+        if (validateForm()) {
+            const experienceInfo = {
+                companyName,
+                position,
+                startDate,
+                endDate: isNotEnd ? (startDate) : (endDate),
+                experDescribe,
+            };
+            if (!isUpdate) {
+                onSubmitExperience(experienceInfo, -1);
+                resetAllFields();
+            }
+            else {
+                onSubmitExperience(experienceInfo, currentExp.index)
+            }
         }
     };
 
@@ -50,10 +56,19 @@ const ExperienceForm = ({ onSubmitExperience, onCancel, currentExp }) => {
         onCancel();
     };
 
+    const validateForm = () => {
+        if (companyName === "" || position === "" || startDate === "" || (endDate === "" && !isNotEnd)) {
+            setValidatext("Vui lòng điền đủ công ty, chức vụ, ngày bắt đầu và kết thúc");
+            return false;
+        }
+        else return true;
+    }
+
     return (
         <div className="pop-up-box">
             <h2>Kinh nghiệm của bạn</h2>
             <form className="form-popup">
+                <span className="valid-text">{validatext}</span>
                 <div className="popup-input-box">
                     <label htmlFor="companyName">Tên công ty/ tổ chức:</label>
                     <input

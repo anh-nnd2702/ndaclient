@@ -14,6 +14,7 @@ const SkillList = ({ skillList, listLength, handleDeleteSkill, handleUpdateSkill
                     <div className="item-skill-box">
                         <div className="item-skill-content">
                             <h3>{skillItem.skillName}: </h3>
+                            {(skillItem.skillLevel>0)&&
                             <div className="rating-box">
                                 <Rating
                                     initialRating={skillItem.skillLevel}
@@ -21,7 +22,7 @@ const SkillList = ({ skillList, listLength, handleDeleteSkill, handleUpdateSkill
                                     fullSymbol={<i className="rate-icon fa-solid fa-star"></i>}
                                     readonly
                                 />
-                            </div>
+                            </div>}
                         </div>
                         <p className="item-describe">{skillItem.skillDescribe}</p>
                     </div>

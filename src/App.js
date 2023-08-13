@@ -32,10 +32,11 @@ import CompanyProfileScene from './scenes/companyProfile/companyProfile'
 import UpdateJobScene from './scenes/updateJob/updateJob';
 import UpdateCvScene from './scenes/updateCv/updateCv';
 import CandidateApplication from './scenes/viewApplication/candidateApplication';
-import AdminDashboard from './scenes/adminDashboard.jsx';
-import AdminLogin from './scenes/adminLogin.jsx';
+import AdminDashboard from './scenes/adminDashboard/adminDashboard';
+import AdminLogin from './scenes/auth/adminLogin';
 import AdminHeader from './containers/header/adminHeader.jsx';
 import ResetPassword from './scenes/auth/resetPassword.jsx';
+import AllReports from './scenes/allreports/allReport.jsx';
 
 import './App.css';
 
@@ -55,7 +56,6 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    checkLoginStatus();
     checkLoginHrStatus();
     const companyId = localStorage.getItem('companyId');
     const isConnected = checkConnectionStatus();
@@ -140,6 +140,7 @@ function App() {
 
   const handleCandidateNotification = (data) => {
     setCandidateNotifi((prevNotifi) => [...prevNotifi, data]);
+
     console.log(candidateNotifi);
     console.log('Received notification:', data);
   };
@@ -156,23 +157,35 @@ function App() {
         const companyName = fullName;
         const companyPass = password;
         const infor = await signUpCompany(companyName, email, companyPass);
-        if (infor) {
+        if (infor===200) {
           setIsLoggedInHr(true);
-          navigate("/companyProfile");
+          navigate("/companyDashboard");
           toast.success('Đăng kí thành công', {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 800,
           });
         }
+        else if(infor===400){
+          toast.error(`Đăng ký thất bại: email này đã được đăng ký`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+        }
       }
       else {
         const infor = await signUp(fullName, email, password);
-        if (infor) {
+        if (infor===200) {
           setIsLoggedIn(true);
-          navigate(-1);
+          navigate("/");
           toast.success('Đăng kí thành công', {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 800,
+          });
+        }
+        else if(infor===400){
+          toast.error(`Đăng ký thất bại: email này đã được đăng ký`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
           });
         }
       }
@@ -366,7 +379,8 @@ function App() {
           <Route path='/admin' element={<AdminDashboard isAdmin={isAdmin} />} />
           <Route path='/adminLogin' element={<AdminLogin onLogin={handleAdminLogin} />} />
           <Route path='/company/:companyId' element={<CompanyInfor />} />
-          <Route path='/candidate/resetPassword/:token' element={<ResetPassword/>}/>
+          <Route path='/candidate/resetPassword/:token' element={<ResetPassword />} />
+          <Route path='/reportJob' element={<AllReports />} />
         </Routes>
       </Router>
       <ToastContainer />

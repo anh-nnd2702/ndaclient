@@ -176,7 +176,7 @@ const CreateCvScene = ({ isLoggedIn }) => {
                         autoClose: 800,
                     });
                 }
-                console.log("false");
+                navigate(-1)
             }
             else {
                 const isMainCv = false;
@@ -214,6 +214,7 @@ const CreateCvScene = ({ isLoggedIn }) => {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 800,
                     });
+                    navigate(-1)
                 }
             }
 

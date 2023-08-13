@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getReference } from "../../apis/reference.js";
 import { getCompanyInfo } from '../../apis/company';
-import { createJob, getJob, updateJob } from '../../apis/job';
+import { getJob} from '../../apis/job';
+import NewCompanyCover from '../../components/newCompanyCover/newCompanyCover.jsx';
 
-const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
+const JobForm = ({companyId, isCreate, onSubmitJob, onUpdateJob }) => {
     const [cityList, setCityList] = useState([]);
     const [workLevelList, setWorkLevelList] = useState([]);
     const [workFieldList, setWorkFieldList] = useState([]);
@@ -14,6 +15,8 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
     const { jobId } = useParams();
     const [jobData, setJobData] = useState({});
     const [unLimit, setUnLimit] = useState(false);
+    const [companyInfor, setCompanyInfor] = useState({})
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         jobTitle: '',
         workAddress: '',
@@ -59,6 +62,12 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
                     hireCount: job.hireCount,
                     workFieldId: job.workFieldId,
                 })
+                if(job.minWage===0 && job.maxWage===0){
+                    setIsNego(true)
+                }
+                if(job.hireCount===0){
+                    setUnLimit(true)
+                }
             }
         }
         catch (error) {
@@ -81,11 +90,14 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
 
     const fetchCompanyInfo = async () => {
         try {
-            const company = await getCompanyInfo();
-            setFormData({
-                ...formData,
-                workAddress: company.companyAddress
-            })
+            const company = await getCompanyInfo(companyId);
+            if(company){
+                setCompanyInfor(company);
+                setFormData({
+                    ...formData,
+                    workAddress: company.companyAddress
+                })
+            }
         }
         catch (error) {
             console.error('There was an error fetching company data:', error);
@@ -101,8 +113,7 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
-
+    }, [companyId]);
 
     const handleChange = (e) => {
         setFormData({
@@ -111,9 +122,23 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
         });
     };
 
+    const handleUnLimitCheck = (e) =>{
+        if(e.target.checked){
+            setFormData({
+                ...formData,
+                hireCount:0,
+            });
+            setUnLimit(true)
+        }
+        else{
+            setUnLimit(false);
+        }
+    }
+
     const currentDate = new Date().toISOString().split('T')[0];
     const handleSubmitForm = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
             if (isNego) {
                 setFormData({
@@ -137,6 +162,9 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
         }
         catch (error) {
             console.log(error);
+        }
+        finally{
+            setIsSubmitting(false);
         }
     }
 
@@ -359,7 +387,7 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
                             type="checkbox"
                             id="unLimit"
                             checked={unLimit}
-                            onChange={(e) => { setUnLimit(e.target.checked) }}
+                            onChange={handleUnLimitCheck}
                         />
                     </div>
                     <div className='job-input-box'>
@@ -376,7 +404,13 @@ const JobForm = ({ isLoggedInHr, isCreate, onSubmitJob, onUpdateJob }) => {
                     </div>
                 </div>
             </div>
-            <button type='submit' id='submitJobBtn'>Đăng tin</button>
+            {isCreate? (<button type='submit' id='submitJobBtn' disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i>:(`Đăng tin`)}</button>):(
+                <button type='submit' id='submitJobBtn' disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i>:(`Cập nhật`)}</button>
+            )}
+            
+            {(companyInfor.isActive==true && companyInfor.isGranted==false)&&(
+                <NewCompanyCover></NewCompanyCover>
+            )}
         </form>
     )
 }

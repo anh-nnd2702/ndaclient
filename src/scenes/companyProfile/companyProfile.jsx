@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { getCompanyInfo } from "../../apis/company";
-import CompanyLicenseForm from "../../containers/companyProfileForm/companyLicenseForm";
 import CompanyProfileForm from "../../containers/companyProfileForm/companyProfileForm";
 import "./companyProfille.css"
 const CompanyProfileScene = ({isLoggedInHr, onChangeProfile}) =>{

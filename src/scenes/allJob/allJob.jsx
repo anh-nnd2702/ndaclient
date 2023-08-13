@@ -4,6 +4,8 @@ import './allJob.css';
 import Job from "../../components/jobCard/jobCard.jsx";
 import { getReference } from "../../apis/reference.js";
 import { useNavigate } from "react-router-dom";
+import { getMatchJob } from "../../apis/matchJob.js";
+import LoadingDiv from "../../components/loading/loadingPage.jsx";
 
 const AllJob = ({ isHr }) => {
     const [jobs, setJobs] = useState([]);
@@ -23,12 +25,43 @@ const AllJob = ({ isHr }) => {
     const [isNego, setIsNego] = useState(false);
     const navigate = useNavigate();
 
+    const [matchJob, setMatchJob] = useState([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const checkLogin = () => {
+        const loggedIn = localStorage.getItem("isLoggedIn") === true || localStorage.getItem("isLoggedIn") === "true";
+        return loggedIn;
+    }
+
+    const checkLoginHr = () =>{
+        const loggedIn = localStorage.getItem("isLoggedInHr") === true || localStorage.getItem("isLoggedInHr") === "true";
+        return loggedIn;
+    }
+
+    const fetchMatchJobs = async () => {
+        if (checkLogin()) {
+            setIsLoggedIn(true);
+            const matchJobs = await getMatchJob();
+            if (matchJobs && matchJobs.length > 0) {
+                setMatchJob(matchJobs)
+            }
+            else {
+                setMatchJob([]);
+            }
+        }
+        else {
+            setIsLoggedIn(false);
+        }
+    }
+
     useEffect(() => {
         fetchJobs();
-        if (isHr) {
+        fetchMatchJobs();
+        if (checkLoginHr()) {
             navigate('/companyDashboard');
         }
-        else{
+        else {
             const isAdmin = localStorage.getItem("isAdmin") === true || localStorage.getItem("isAdmin") === "true";
             if (isAdmin) {
                 navigate("/admin");
@@ -93,6 +126,7 @@ const AllJob = ({ isHr }) => {
         } catch (error) {
             console.log(error);
         }
+        setIsLoading(false);
     };
 
     const handleFilterSubmit = async () => {
@@ -118,128 +152,146 @@ const AllJob = ({ isHr }) => {
             }
         }
         catch {
-
+            setJobs([]);
         }
     }
 
     return (
-        <div className="all-job">
-            <div className="all-job-header">
-                <h1>Tìm việc làm nhanh, mới nhất:</h1>
-                <div className="search-div">
-                    <input type="text"
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}></input>
-                    <button className="search-btn" onClick={handleFilterSubmit}>Tìm kiếm</button>
-                </div>
+        <div>{isLoggedIn &&
+            <div className="match-job-box">
+                <h1 className="match-job-title">Việc làm gợi ý dành cho bạn</h1>
+                {(matchJob && matchJob.length>0)? (
+                    <div className="match-job-list">
+                        {matchJob.map((mJ)=>(
+                            <div key={mJ.matchId}>
+                                <Job key={mJ.Job.jobId} job={mJ.Job}></Job>
+                            </div>
+                        ))}
+                    </div>
+                ):(
+                    <h4 className="non-match-job">Chưa có việc làm phù hợp với bạn, vui lòng đặt lại cài đặt tìm việc để nhận được gợi ý!</h4>
+                )}
+            </div>
+            }
+            <div className="all-job">
+                <div className="all-job-header">
+                    <h1>Tìm việc làm nhanh, mới nhất:</h1>
+                    <div className="search-div">
+                        <input type="text"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}></input>
+                        <button className="search-btn" onClick={handleFilterSubmit}>Tìm kiếm</button>
+                    </div>
 
-            </div>
-            <div className="all-job-body">
-                <div className="filter-box">
-                    <div className="job-filter-box">
-                        <label htmlFor="city">Tỉnh/ Thành phố:</label>
-                        <select id="city"
-                            name='cityId'
-                            value={cityId}
-                            onChange={(e) => setCityId(e.target.value)}>
-                            {cityList.map((city) => (
-                                <option key={city.cityId} value={city.cityId}>
-                                    {city.cityName}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="job-filter-box">
-                        <label htmlFor="workField">Lĩnh vực/Chuyên môn:</label>
-                        <select id="workField"
-                            name='workFieldId'
-                            value={workFieldId}
-                            onChange={(e) => setWorkFieldId(e.target.value)}>
-                            {workFieldList.map((wF) => (
-                                <option key={wF.workFieldId} value={wF.workFieldId}>
-                                    {wF.workFieldName}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="job-filter-box">
-                        <label htmlFor="jobType">Hình thức làm việc:</label>
-                        <select id="jobType"
-                            name='jobTypeId'
-                            value={jobTypeId}
-                            onChange={(e) => setJobTypeId(e.target.value)}>
-                            {jobTypeList.map((jt) => (
-                                <option key={jt.jobTypeId} value={jt.jobTypeId}>
-                                    {jt.jobTypeName}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="job-filter-box">
-                        <label htmlFor="workLevel">Cấp bậc:</label>
-                        <select id="workLevel"
-                            name='workLevelId'
-                            value={workLevelId}
-                            onChange={(e) => setWorkLevelId(e.target.value)}>
-                            {workLevelList.map((wL) => (
-                                <option key={wL.workLevelId} value={wL.workLevelId}>
-                                    {wL.workLevelName}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="job-filter-box">
-                        <label htmlFor="experience">Kinh nghiệm:</label>
-                        <select id="experience"
-                            name='experience'
-                            value={expId}
-                            onChange={handleExpChange}>
-                            {expList.map((exp) => (
-                                <option key={exp.id} value={exp.id}>
-                                    {exp.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="job-filter-box">
-                        <label htmlFor="wage">Mức lương từ:</label>
-                        <div className="wage-input">
+                </div>
+                <div className="all-job-body">
+                    <div className="filter-box">
+                        <div className="job-filter-box">
+                            <label htmlFor="city">Tỉnh/ Thành phố:</label>
+                            <select id="city"
+                                name='cityId'
+                                value={cityId}
+                                onChange={(e) => setCityId(e.target.value)}>
+                                {cityList.map((city) => (
+                                    <option key={city.cityId} value={city.cityId}>
+                                        {city.cityName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="job-filter-box">
+                            <label htmlFor="workField">Lĩnh vực/Chuyên môn:</label>
+                            <select id="workField"
+                                name='workFieldId'
+                                value={workFieldId}
+                                onChange={(e) => setWorkFieldId(e.target.value)}>
+                                {workFieldList.map((wF) => (
+                                    <option key={wF.workFieldId} value={wF.workFieldId}>
+                                        {wF.workFieldName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="job-filter-box">
+                            <label htmlFor="jobType">Hình thức làm việc:</label>
+                            <select id="jobType"
+                                name='jobTypeId'
+                                value={jobTypeId}
+                                onChange={(e) => setJobTypeId(e.target.value)}>
+                                {jobTypeList.map((jt) => (
+                                    <option key={jt.jobTypeId} value={jt.jobTypeId}>
+                                        {jt.jobTypeName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="job-filter-box">
+                            <label htmlFor="workLevel">Cấp bậc:</label>
+                            <select id="workLevel"
+                                name='workLevelId'
+                                value={workLevelId}
+                                onChange={(e) => setWorkLevelId(e.target.value)}>
+                                {workLevelList.map((wL) => (
+                                    <option key={wL.workLevelId} value={wL.workLevelId}>
+                                        {wL.workLevelName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="job-filter-box">
+                            <label htmlFor="experience">Kinh nghiệm:</label>
+                            <select id="experience"
+                                name='experience'
+                                value={expId}
+                                onChange={handleExpChange}>
+                                {expList.map((exp) => (
+                                    <option key={exp.id} value={exp.id}>
+                                        {exp.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="job-filter-box">
+                            <label htmlFor="wage">Mức lương từ:</label>
+                            <div className="wage-input">
+                                <input
+                                    disabled={isNego}
+                                    type="number"
+                                    max={99}
+                                    min={0}
+                                    id="minWage"
+                                    name="minWage"
+                                    value={minWage}
+                                    onChange={(e) => setMinWage(e.target.value)}
+                                    required
+                                />
+                                <p>triệu đồng</p>
+                            </div>
+                        </div>
+                        <div className="nego-wage-box">
+                            <label htmlFor="isNego">Hoặc: lương thỏa thuận:</label>
                             <input
-                                disabled={isNego}
-                                type="number"
-                                max={99}
-                                min={0}
-                                id="minWage"
-                                name="minWage"
-                                value={minWage}
-                                onChange={(e) => setMinWage(e.target.value)}
-                                required
+                                type="checkbox"
+                                id="isNego"
+                                checked={isNego}
+                                onChange={(e) => { setIsNego(e.target.checked) }}
                             />
-                            <p>triệu đồng</p>
                         </div>
+                        <button className="filter-btn" onClick={handleFilterSubmit}>Lọc</button>
                     </div>
-                    <div className="nego-wage-box">
-                        <label htmlFor="isNego">Hoặc: lương thỏa thuận:</label>
-                        <input
-                            type="checkbox"
-                            id="isNego"
-                            checked={isNego}
-                            onChange={(e) => { setIsNego(e.target.checked) }}
-                        />
+                    <div className="job-list">
+                        {jobs && jobs.map((job) => (
+                            <Job key={job.jobId} job={job} />
+                        ))}
+                        {jobs.length === 0 && (
+                            <div>
+                                <h2>Không tìm thấy việc làm nào!</h2>
+                            </div>
+                        )}
                     </div>
-                    <button className="filter-btn" onClick={handleFilterSubmit}>Lọc</button>
-                </div>
-                <div className="job-list">
-                    {jobs && jobs.map((job) => (
-                        <Job key={job.jobId} job={job} />
-                    ))}
-                    {jobs.length === 0 && (
-                        <div>
-                            <h2>Không tìm thấy việc làm nào!</h2>
-                        </div>
-                    )}
                 </div>
             </div>
+            <LoadingDiv isLoading={isLoading}></LoadingDiv>
         </div>
     );
 

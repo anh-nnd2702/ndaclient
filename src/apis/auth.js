@@ -60,7 +60,7 @@ export const signUpCompany = async (companyName, email, companyPass) => {
       Cookies.set('token', token, { expires: 7, secure: true });
     }
 
-    return infor;
+    return response.status;
   } catch (error) {
     throw error.response.data.error;
   }

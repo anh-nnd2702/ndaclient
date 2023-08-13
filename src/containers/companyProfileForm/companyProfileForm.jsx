@@ -14,7 +14,6 @@ const CompanyProfileForm = ({ company, onCompanyUpdate }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [cityList, setCityList] = useState([]);
-    const [companyLicense, setCompanyLicense] = useState(company.companyLicense);
     const [selectedPdf, setSelectedPdf] = useState(null);
 
     useEffect(() => {
@@ -204,21 +203,23 @@ const CompanyProfileForm = ({ company, onCompanyUpdate }) => {
                 <div className="input-box">
                     <label htmlFor="companyIntro">Giới thiệu công ty:</label>
                     <textarea
-                        rows={3}
+                        className='intro-text-area'
+                        rows={4}
                         type="text"
                         id="companyIntro"
                         value={companyIntro}
                         onChange={(e) => setCompanyIntro(e.target.value)}
                     ></textarea>
                 </div>
-                {(company.companyLicense) ? (<div>
                     <div className="input-box">
                         <label>Giấy phép kinh doanh</label>
-                        <NavLink to={company.companyLicense}>Xem giấy phép kinh doanh</NavLink>
+                        {company.companyLicense? (
+                        <NavLink to={company.companyLicense} target="_blank" rel="noopener noreferrer">Xem giấy phép kinh doanh</NavLink>):(
+                            <span>Bạn chưa tải lên giấy phép</span>
+                        )}
                     </div>
-                </div>) : (
                     <div className="input-box">
-                        <label>Tải lên giấy phép kinh doanh</label>
+                        <label>Tải lên giấy phép kinh doanh (PDF)</label>
                         <input
                             type="file"
                             id="companyLogo"
@@ -226,7 +227,6 @@ const CompanyProfileForm = ({ company, onCompanyUpdate }) => {
                             onChange={handleLicenseChange}
                         />
                     </div>
-                )}
                 <button className="submit-btn" id="submitProfileBtn" type="submit" disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Lưu thông tin"}</button>
             </form>
         </div>

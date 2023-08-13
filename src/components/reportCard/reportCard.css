@@ -1,0 +1,60 @@
+.report-card{
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: solid 1px gainsboro;
+    margin-bottom: 15px;
+}
+
+.report-card-head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.report-card a{
+    text-decoration: none;
+}
+
+.report-card-head h3{
+    margin: 5px 0px;
+    color: #003B73;
+}
+
+.report-card h4{
+    margin: 5px 0px 10px 0px;
+}
+
+.report-actions{
+    margin-top: 10px;
+    text-align: right;
+}
+
+.btn-delete{
+    padding: 5px 14px;
+    margin-right: 20px;
+    border-radius: 4px;
+    border: solid 2px #ff355e;
+    background-color: #fff;
+    color: #ff355e;
+    cursor: pointer;
+}
+
+.btn-pass{
+    padding: 5px 14px;
+    border-radius: 4px;
+    border: solid 2px #18A558;
+    background-color: #fff;
+    color: #18A558;
+    cursor: pointer;
+}
+
+.btn-delete:hover{
+    background-color: #ff355e;
+    color: #fff;
+}
+
+.btn-pass:hover{
+    background-color: #18A558;
+    color: #fff;
+}

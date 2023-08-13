@@ -1,0 +1,16 @@
+.loading-div{
+    background-color: gainsboro;
+    width: 100vw;
+    height: 100vh;
+    top: 70px;
+    left: 0;
+    z-index: 199;
+    text-align: center;
+    position: fixed;
+}
+
+.loading-div i{
+    font-size: 30px;
+    top: 50%;
+    position: relative;
+}

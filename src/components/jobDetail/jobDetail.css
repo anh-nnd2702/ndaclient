@@ -13,9 +13,10 @@
 }
 
 .company-logo{
-    width: 15%;
+    width: 150px;
     height: 100%;
     text-align: right;
+    margin: 0px 5px;
 }
 
 .company-logo img{
@@ -28,12 +29,16 @@
 .detail-title-box{
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: calc(100% - 350px);
 }
 
 .job-box-title{
     margin: 5px 15px;
     color: #003B73;
+}
+
+.link-to-company{
+    text-decoration: none;
 }
 
 .company-name{
@@ -46,12 +51,14 @@
 }
 
 .job-header_action{
-    width: 15%;
+    width: 200px;
     display: flex;
     flex-direction: column;
     text-align: right;
-    padding: 10px 20px;
+    padding: 10px;
     justify-content: space-between;
+    margin-left: auto;
+    margin-right: 0px;
 }
 
 .applied-p{
@@ -60,6 +67,7 @@
     color: #116530;
     font-style: italic;
     font-size: 1.1em;
+    padding-right: 30px;
 }
 
 .saved-p{
@@ -68,6 +76,7 @@
     margin: 10px;
     font-weight: 500;
     font-size: 1.1em;
+    padding-right: 30px;
 }
 
 #btnUnSave{
@@ -77,8 +86,8 @@
     padding: 7px 5px;
     border-radius: 4px;
     cursor: pointer;
-    margin-left: 10px;
     border: solid 1px #ff355e;
+    margin-left: 10px;
 }
 
 #btnUnSave:hover{
@@ -107,9 +116,9 @@
     border-radius: 4px;
     border: solid 1px #ff355e;
     cursor: pointer;
-    margin-left: 10px;
     color: #ff355e;
     background-color: #fff;
+    margin-left: 10px;
 }
 
 #btnSave:hover{
@@ -158,6 +167,13 @@
     color: #003B73;
 }
 
+.job-in-company{
+    background-color: #fff;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
 .basic-infor{
     width: 90%;
     margin-left: 3%;
@@ -203,6 +219,35 @@
 
 .action-item{
     margin-right: 30px;
+}
+
+.admin-action-box{
+    padding: 10px 30px 0px 30px;
+    background-color: #fff;
+    margin-top: 20px;
+    border: solid 2px gainsboro;
+    border-radius: 15px;
+}
+
+.admin-action-box h3, h4{
+    color: #003B73;
+    margin: 10px 0px;
+}
+
+.report-text-item{
+    border: solid 1px gainsboro;
+    padding: 5px 20px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.report-text-item p{
+    margin: 5px 0px;
+    font-weight: 500;
+}
+
+.report-text-item span{
+    font-style: italic;
 }
 
 .company-info-box{
@@ -289,7 +334,8 @@
     padding: 0px;
 }
 
-.btnSubmitApply{
+.btnSubmitApply,
+#btnSubmitReport{
     width: 120px;
     padding: 7px 5px;
     border-radius: 4px;
@@ -299,10 +345,12 @@
     background-color: #18A558;
 }
 
+#btnSubmitReport:hover,
 .btnSubmitApply:hover{
     background-color: #116530;
 }
 
+#btnCancelReport,
 .btnCancelApply{
     width: 100px;
     padding: 7px 5px;
@@ -313,6 +361,7 @@
     background-color: #fff;
 }
 
+#btnCancelReport:hover,
 .btnCancelApply:hover{
     background-color: #ff355e;
     color: #fff;
@@ -343,4 +392,8 @@
     font-size: 0.9em;
     font-weight: 500;
     border-radius: 4px;
+}
+
+.validate-text{
+    color: #ff355e;
 }

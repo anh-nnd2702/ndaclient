@@ -2,21 +2,21 @@ import React, { useEffect, useRef } from 'react';
 import { Bar, Chart } from 'react-chartjs-2';
 
 const JobChart = ({ data }) => {
-    const checkExpired = (t) => {
-        const curDate = new Date();
-        const todayString = curDate.toISOString().split('T')[0];
-        return (t < todayString);
-    }
-    const jobs = data.filter(job =>{
-        return !checkExpired(job.expireDate);
-    })
+  const checkExpired = (t) => {
+    const curDate = new Date();
+    const todayString = curDate.toISOString().split('T')[0];
+    return (t < todayString);
+  }
+  const jobs = data.filter(job => {
+    return !checkExpired(job.expireDate);
+  })
   const jobId = jobs.map(job => `Id- ${job.jobId}`);
   const appliedCount = jobs.map(job => job.AppliedCount);
   const newAppliedCount = jobs.map(job => job.newAppliedCount);
   const seenAppliedCount = jobs.map(job => job.seenAppliedCount);
   const rejectedAppliedCount = jobs.map(job => job.rejectedAppliedCount);
   const acceptedAppliedCount = appliedCount.map(
-    (count, index) => (count - seenAppliedCount[index] - rejectedAppliedCount[index]-newAppliedCount[index])
+    (count, index) => (count - seenAppliedCount[index] - rejectedAppliedCount[index] - newAppliedCount[index])
   );
 
   const chartData = {
@@ -30,7 +30,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: '#60A3D9',
         hoverBorderColor: 'rgba(75,192,192,1)',
         data: appliedCount,
-    
+
       },
       {
         label: 'Ứng tuyển mới',
@@ -40,7 +40,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
         data: newAppliedCount,
-     
+
       },
       {
         label: 'Ứng tuyển đã xem',
@@ -50,7 +50,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(54,162,235,0.4)',
         hoverBorderColor: 'rgba(54,162,235,1)',
         data: seenAppliedCount,
- 
+
       },
       {
         label: 'Số ứng viên đã loại',
@@ -60,7 +60,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(255,206,86,0.4)',
         hoverBorderColor: 'rgba(255,206,86,1)',
         data: rejectedAppliedCount,
-     
+
       },
       {
         label: 'Số ứng viên phù hợp',
@@ -70,7 +70,7 @@ const JobChart = ({ data }) => {
         hoverBackgroundColor: 'rgba(153,102,255,0.4)',
         hoverBorderColor: 'rgba(153,102,255,1)',
         data: acceptedAppliedCount,
-    
+
       },
     ],
   };
@@ -99,8 +99,6 @@ const JobChart = ({ data }) => {
       },
     },
   };
-
-  const chartRef = useRef(null);
 
   useEffect(() => {
     // Vẽ biểu đồ khi dữ liệu jobs thay đổi

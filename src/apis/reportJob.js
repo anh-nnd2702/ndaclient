@@ -61,7 +61,7 @@ export const deleteReport = async (reportId) =>{
 export const updateReportStatus = async (reportId, newStatus) =>{
     try {
         const token = Cookies.get('token');
-        const result = await axios.put(`${DOMAIN}/report/`+reportId,{newStatus},
+        const result = await axios.put(`${DOMAIN}/report/`+reportId, {newStatus},
             {
                 headers: {
                     Authorization: `Bearer ${token}`

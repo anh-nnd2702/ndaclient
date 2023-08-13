@@ -2,60 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { getAllCv } from '../../apis/cv.js';
 import { getReference } from '../../apis/reference.js';
 import "./findCv.css";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import LoadingDiv from '../../components/loading/loadingPage.jsx';
+import { getCompanyInfo } from '../../apis/company.js';
+import NewCompanyCover from '../../components/newCompanyCover/newCompanyCover.jsx';
 
-const FindCandidateCv = ({ isLoggedInHr }) => {
+const FindCandidateCv = () => {
     const [cvList, setCvList] = useState([]);
     const [cityList, setCityList] = useState([]);
-    const [workLevelList, setWorkLevelList] = useState([]);
     const [workFieldList, setWorkFieldList] = useState([]);
-    const [jobTypeList, setJobTypeList] = useState([]);
+    const [companyInfor, setCompanyInfor] = useState({})
+    const [isLoading, setIsLoading] = useState(true);
 
     const [cityId, setCityId] = useState(0);
     const [workFieldId, setWorkFieldId] = useState(0);
     const [eduLevelId, setEduLevelId] = useState(0);
     const [skill, setSkill] = useState("");
+    const [gender, setGender] = useState(0);
     const [educationLevel, setEduLevel] = useState([]);
 
     const [expId, setExpId] = useState(0);
     const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
-    const expList = [
+
+    const genderList = [
         {
             "id": "0",
             "label": "Tất cả",
-            "minVal": -1,
-            "maxVal": 100
+            "value": 0,
         },
         {
             "id": "1",
-            "label": "Chưa có kinh nghiệm",
-            "minVal": 0,
-            "maxVal": 0
+            "label": "Nữ",
+            "value": 1,
         },
         {
             "id": "2",
-            "label": "Từ 1 - 3 năm",
-            "minVal": 1,
-            "maxVal": 3
-        },
-        {
-            "id": "3",
-            "label": "Từ 4 - 6 năm",
-            "minVal": 4,
-            "maxVal": 6
-        },
-        {
-            "id": "4",
-            "label": "Từ 7 - 10 năm",
-            "minVal": 7,
-            "maxVal": 10
-        },
-        {
-            "id": "5",
-            "label": "Trên 10 năm",
-            "minVal": 10,
-            "maxVal": 100
+            "label": "Nam",
+            "value": 2,
         }
     ]
 
@@ -68,24 +52,37 @@ const FindCandidateCv = ({ isLoggedInHr }) => {
             const reference = await getReference();
             setCityList(reference.city);
             setWorkFieldList(reference.workField);
-            setWorkLevelList(reference.workLevel);
-            setJobTypeList(reference.jobType);
             setEduLevel(reference.educationLevel);
-
-            const listCv = await getAllCv();
+            const filterParams = {keyword, cityId, workFieldId, experience: expId, eduLevelId, gender, skill}
+            const listCv = await getAllCv(filterParams);
 
             if (listCv) {
                 setCvList(listCv);
             }
         }
         catch (error) {
+            console.log(error);
             setCvList([])
+        }
+        setIsLoading(false)
+    }
+
+    const fetchCompany = async () =>{
+        const isHr = localStorage.getItem("isLoggedInHr") === true || localStorage.getItem("isLoggedInHr") === "true";
+        if(isHr){
+            const companyId = localStorage.getItem("companyId")
+            const companyData = await getCompanyInfo(companyId);
+            setCompanyInfor(companyData);
+        }
+        else {
+            navigate('/login')
         }
     }
 
     const handleFilterSubmit = async () => {
         try {
-            const listCv = await getAllCv();
+            const filterParams = {keyword, cityId, workFieldId, experience: expId, eduLevelId, gender, skill}
+            const listCv = await getAllCv(filterParams);
             if (listCv) {
                 setCvList(listCv);
             }
@@ -96,6 +93,7 @@ const FindCandidateCv = ({ isLoggedInHr }) => {
     }
 
     useEffect(() => {
+        fetchCompany();
         fetchCv();
     }, []);
 
@@ -145,11 +143,16 @@ const FindCandidateCv = ({ isLoggedInHr }) => {
                             name='experience'
                             value={expId}
                             onChange={handleExpChange}>
-                            {expList.map((exp) => (
-                                <option key={exp.id} value={exp.id}>
-                                    {exp.label}
+                            <option key={0} value={0}>
+                                    Tất cả
                                 </option>
-                            ))}
+                            <option key={1} value={1}>
+                                    Chưa có kinh nghiệm
+                                </option>
+
+                            <option key={2} value={2}>
+                                Đã có kinh nghiệm
+                                </option>
                         </select>
                     </div>
                     <div className="job-filter-box">
@@ -166,14 +169,14 @@ const FindCandidateCv = ({ isLoggedInHr }) => {
                         </select>
                     </div>
                     <div className="job-filter-box">
-                        <label htmlFor="education">Giới tính:</label>
-                        <select id="education"
-                            name='education'
-                            value={eduLevelId}
-                            onChange={(e) => setEduLevelId(e.target.value)}>
-                            {educationLevel.map((edu) => (
-                                <option key={edu.eduLevelId} value={edu.eduLevelId}>
-                                    {edu.eduLevelName}
+                        <label htmlFor="gender">Giới tính:</label>
+                        <select id="gender"
+                            name='gender'
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}>
+                            {genderList.map((gend) => (
+                                <option key={gend.id} value={gend.value}>
+                                    {gend.label}
                                 </option>
                             ))}
                         </select>
@@ -195,20 +198,26 @@ const FindCandidateCv = ({ isLoggedInHr }) => {
                     {(cvList && cvList.length > 0) ? (
                         <div>
                             {cvList.map((cv, cvId) => (
-                                <div key={cv.cvId} className='cv-card'>
-                                    <div className='cv-card-head'>
-                                        <h2>{cv.fullName}</h2>
-                                        <h3>{cv.cvPosition}</h3>
+                                <NavLink to={`/viewCv/${cv.cvId}`} key={cv.cvId} className='cv-item-link'>
+                                    <div className='cv-card'>
+                                        <div className='cv-card-head'>
+                                            <h2>{cv.fullName}</h2>
+                                            <h5>{cv.cvPosition}</h5>
+                                        </div>
+                                        <h4>Giới thiệu, mục tiêu nghề nghiệp:</h4>
+                                        <p>{cv.cvIntro}</p>
                                     </div>
-                                    <h4>Giới thiệu, mục tiêu nghề nghiệp:</h4>
-                                    <p>{cv.cvIntro}</p>
-                                </div>
+                                </NavLink>
                             ))}
                         </div>
                     ) : (
                         <h2>Không tìm thấy Cv nào</h2>
                     )}
                 </div>
+                <LoadingDiv isLoading={isLoading}></LoadingDiv>
+                {(companyInfor.isActive==true && companyInfor.isGranted==false)&&(
+                    <NewCompanyCover></NewCompanyCover>
+                )}
             </div>
         </div>
 

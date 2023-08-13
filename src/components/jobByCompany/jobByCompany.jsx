@@ -18,8 +18,8 @@ const JobByCompany = ({ jobs }) => {
   return (
     <div>
       {notEmpty ? (
-        <div>
-          <h2>Việc làm cùng công ty:</h2>
+        <div className="job-in-company">
+          <h2 className="section-header">Việc làm cùng công ty:</h2>
           {listJobs.map((job) => (
             <Job key={job.jobId} job={job} />
           ))}

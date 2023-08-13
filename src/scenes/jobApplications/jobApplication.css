@@ -1,0 +1,68 @@
+.job-apply-body{
+    width: 50vw;
+    margin: 30px 25vw 30px 25vw;
+    background-color: #fff;
+    border-radius: 20px;
+    border: solid 2px gainsboro;
+    padding: 20px 40px;
+}
+
+.link-see-more{
+    text-decoration: none;
+}
+
+.job-apply-body h1{
+    margin: 5px 0px;
+    color: #003B73;
+}
+
+.job-apply-body h2{
+    margin: 10px 0px;
+    color: #60A3D9;
+}
+
+.apply-item{
+    margin: 10px 0px;
+    padding: 10px 20px;
+    border: solid 2px gainsboro;
+    border-radius: 10px;
+    background-color: #f3f5f7;
+}
+
+.apply-item:hover{
+    background-color: #fff;
+    border: solid 2px #60A3D9;
+}
+
+.apply-item h4{
+    margin: 0px;
+}
+
+.time-box p{
+    margin: 0px 0px 20px 0px;
+}
+
+.cover-letter{
+    margin: 5px 0px;
+    font-weight: 500;
+}
+
+.apply-time{
+    text-align: right;
+    margin: 5px 10px;
+    font-style: italic;
+}
+
+.apply-head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 20px;
+    align-items: center;
+}
+
+.apply-head a{
+    text-decoration: none;
+}
+
+

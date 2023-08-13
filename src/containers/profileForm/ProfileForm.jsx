@@ -6,7 +6,7 @@ import { vi } from 'date-fns/locale';
 import "./ProfileForm.css"
 import { NavLink } from "react-router-dom";
 
-const ProfileForm = ({ candidate, cityList, onProfileUpdate }) => {
+const ProfileForm = ({ candidate, onProfileUpdate }) => {
     const [fullName, setFullName] = useState(candidate.fullName);
     const [phoneNumber, setPhoneNumber] = useState(candidate.phoneNumber || "");
     const [gender, setGender] = useState(candidate.gender || "");
@@ -14,7 +14,6 @@ const ProfileForm = ({ candidate, cityList, onProfileUpdate }) => {
     const [address, setAddress] = useState(candidate.address || "");
     const [avatar, setAvatar] = useState(null);
     const [isSeeking, setIsSeeking] = useState(candidate.isSeeking || false);
-    const [cityId, setCityId] = useState(candidate.cityId || 0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
 
@@ -25,7 +24,6 @@ const ProfileForm = ({ candidate, cityList, onProfileUpdate }) => {
         setDateOfBirth(candidate.dateOfBirth);
         setAddress(candidate.address||"");
         setIsSeeking(candidate.isSeeking);
-        setCityId(candidate.cityId);
     }, [candidate]);
 
     useEffect(() => {

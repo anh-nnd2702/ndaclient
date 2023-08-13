@@ -59,7 +59,7 @@ const UpdateJobScene = ({ isLoggedInHr }) => {
     };
 
     return (
-        <div>
+        <div className='job-create-body'>
             <h1>Chỉnh sửa tin tuyển dụng</h1>
             <JobForm isLoggedInHr={isHr} isCreate={isCreate} onSubmitJob={handleSubmit} onUpdateJob={handleSubmit} ></JobForm>
             <ToastContainer />

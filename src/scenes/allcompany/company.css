@@ -1,0 +1,64 @@
+.all-company-body{
+    background-color: #fff;
+    width: 70vw;
+    margin: 30px 15vw;
+    padding: 30px;
+    border-radius: 20px;
+    border: solid 2px gainsboro;
+}
+
+.all-company-body h1{
+    color: #003B73;
+    margin: 5px 0px 15px 0px;
+}
+
+.company-list{
+    margin-top: 20px;
+}
+
+.company-card-left{
+    width: 180px;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid 1px #60A3D9;
+    align-items: center;
+    text-align: center;
+    margin: 5px;
+    height: 180px;
+}
+
+.company-card-left img{
+    width: 160px;
+    aspect-ratio: 1;
+}
+
+.company-card-right{
+    margin-left: 10px;
+    width: calc(100% - 250px);
+}
+
+.company-card-right p{
+    margin: 10px 0px;
+}
+
+.name-and-tag{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
+}
+
+.name-and-tag h2{
+    margin: 5px 10px 10px 0px;
+    color: #003B73;
+}
+
+.link-company-card{
+    text-decoration: none;
+}
+
+.link-company-card p,
+.link-company-card span{
+    color: #000;
+}

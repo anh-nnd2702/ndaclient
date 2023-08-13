@@ -2,13 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createReport, updateReportByJobId, updateReportStatus } from "../../apis/reportJob.js";
+import { createReport, updateReportByJobId } from "../../apis/reportJob.js";
 import "./jobDetail.css";
 import { getJob, getJobByCompany, updateJobStatus } from "../../apis/job.js";
 import JobDetail from "../../components/jobDetail/jobDetail";
 import JobByCompany from "../../components/jobByCompany/jobByCompany";
-import { getCandidateApplyByJob, createApply} from "../../apis/applyJob.js";
-import {createSaveJob, getSavedJobByJobId, unSaveJob } from "../../apis/savejob";
+import { getCandidateApplyByJob, createApply } from "../../apis/applyJob.js";
+import { createSaveJob, getSavedJobByJobId, unSaveJob } from "../../apis/savejob";
 
 const JobScene = ({ isLoggedIn }) => {
   const { jobId } = useParams();
@@ -25,7 +25,6 @@ const JobScene = ({ isLoggedIn }) => {
   const [savedJob, setSavedJob] = useState({});
   const [isLoginAdmin, setIsLoginAdmin] = useState(false);
   const [isNotExpired, setIsExpired] = useState(false);
-  const isToastShownRef = useRef(false);
 
   const checkSaved = async () => {
     const { checkSaved, savedData } = await getSavedJobByJobId(jobId);
@@ -103,7 +102,7 @@ const JobScene = ({ isLoggedIn }) => {
     );
   };
 
-  const checkAdmin = () =>{
+  const checkAdmin = () => {
     return (
       localStorage.getItem("isAdmin") === true ||
       localStorage.getItem("isAdmin") === "true"
@@ -112,7 +111,7 @@ const JobScene = ({ isLoggedIn }) => {
 
   const fetchJob = async () => {
     try {
-      const job = await getJob(jobId, checkAdmin())      
+      const job = await getJob(jobId, checkAdmin())
       setJobData(job);
       setCompany(job.company);
       setCity(job.City);
@@ -131,23 +130,20 @@ const JobScene = ({ isLoggedIn }) => {
   };
 
   useEffect(() => {
-    if (!isToastShownRef.current) {
-      fetchJob();
-      setIsLogin(checkLogin());
-      checkApplied();
-      checkSaved();
-      setIsLoginAdmin(checkAdmin());
-    }
+    fetchJob();
+    setIsLogin(checkLogin());
+    checkApplied();
+    checkSaved();
+    setIsLoginAdmin(checkAdmin());
   }, []);
 
   useEffect(() => {
-    if (!isToastShownRef.current) {
-      fetchJob();
-      setIsLogin(checkLogin());
-      checkApplied();
-      checkSaved();
-      setIsLoginAdmin(checkAdmin());
-    }
+    fetchJob();
+    setIsLogin(checkLogin());
+    checkApplied();
+    checkSaved();
+    setIsLoginAdmin(checkAdmin());
+    window.scrollTo(0, 0);
   }, [isLoggedIn, jobId]);
 
   const handleSubmitApply = async (cvId, coverLetter) => {
@@ -159,23 +155,19 @@ const JobScene = ({ isLoggedIn }) => {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 800,
           });
-          isToastShownRef.current = true;
           setApplied(true);
         }
       } catch (error) {
-        console.log(error);
         toast.error("Ứng tuyển thất bại!", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 800,
         });
-        isToastShownRef.current = true;
       }
     } else {
       toast.error("Bạn chưa đăng nhập!", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 800,
       });
-      isToastShownRef.current = true;
     }
   };
 
@@ -187,98 +179,94 @@ const JobScene = ({ isLoggedIn }) => {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 800,
         });
-        isToastShownRef.current = true;
       }
     } catch (error) {
       toast.error("Cõ lỗi xảy ra khi báo cáo tin!", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 800,
       });
-      isToastShownRef.current = true;
     }
   };
 
-  const handleBlockJob = async (jobId) =>{
-    try{
-      const result = await updateJobStatus(jobId, {isActive: false} );
-      if(result){
+  const handleBlockJob = async (jobId) => {
+    try {
+      const result = await updateJobStatus(jobId, { isActive: false });
+      if (result) {
         toast.success("Đã ẩn tin tuyển dụng!", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 800,
         });
-        isToastShownRef.current = true;
+        const updatedjob = { ...jobData, isActive: false };
+        setJobData(updatedjob);
       }
     }
-    catch(error){
+    catch (error) {
       toast.error("Cõ lỗi xảy ra khi ẩn tin!", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 800,
       });
-      isToastShownRef.current = true;
     }
   }
 
   const handlePassAllReports = async (jobId) => {
-    try{
+    try {
       const newStatus = true;
       const result = await updateReportByJobId(jobId, newStatus);
-      if(result){
+      if (result) {
         toast.success("Đã bỏ qua các báo cáo!", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 800,
         });
-        isToastShownRef.current = true;
         const updatedJob = { ...jobData, ReportJobs: [] };
         setJobData(updatedJob);
       }
     }
-    catch(error){
+    catch (error) {
       toast.error("Cõ lỗi xảy ra khi cập nhật báo cáo!", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 900,
       });
-      isToastShownRef.current = true;
     }
   }
 
-  const checkExpired = (expireDate) =>{
+  const checkExpired = (expireDate) => {
     const currentDate = new Date();
     const expireDateObject = new Date(expireDate);
 
-  // So sánh ngày expireDate với ngày hiện tại
-  if (expireDateObject < currentDate) {
-    return false; 
-  } else {
-    return true; 
-  }
+    // So sánh ngày expireDate với ngày hiện tại
+    if (expireDateObject < currentDate) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   return (
     (isNotExpired) ? (
-    <div className="job-scene-body">
-      <JobDetail
-        job={jobData}
-        WorkField={WorkField}
-        WorkLevel={WorkLevel}
-        JobType={JobType}
-        City={City}
-        company={companyData}
-        isLoggedIn={isLogin}
-        isApplied={applied}
-        onApply={handleSubmitApply}
-        onSaveJob={onSaveJob}
-        onUnsaveJob={onUnsaveJob}
-        isSaved={isSaved}
-        onReport={handleSubmitReport}
-        isAdmin={isLoginAdmin}
-        onBlockJob={handleBlockJob}
-        onPassReports={handlePassAllReports}
-      />
-      <JobByCompany jobs={jobByCompany} />
-      <ToastContainer />
-    </div>):(
       <div className="job-scene-body">
-          <h1>Không tìm thấy tin tuyển dụng này!</h1>
+        <JobDetail
+          job={jobData}
+          WorkField={WorkField}
+          WorkLevel={WorkLevel}
+          JobType={JobType}
+          City={City}
+          company={companyData}
+          isLoggedIn={isLogin}
+          isApplied={applied}
+          onApply={handleSubmitApply}
+          onSaveJob={onSaveJob}
+          onUnsaveJob={onUnsaveJob}
+          isSaved={isSaved}
+          onReport={handleSubmitReport}
+          isAdmin={isLoginAdmin}
+          onBlockJob={handleBlockJob}
+          onPassReports={handlePassAllReports}
+        />
+        <JobByCompany jobs={jobByCompany} />
+        <ToastContainer />
+      </div>) : (
+      <div className="job-scene-body">
+        <h1>Tin tuyển dụng không tồn tại hoặc đã hết hạn!</h1>
       </div>
     )
   );

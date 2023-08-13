@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { getAllCompany } from '../../apis/company';
-
+import "./company.css";
+import LoadingDiv from "../../components/loading/loadingPage"
 const AllCompany = () => {
     const [companyList, setCompanyList] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchListCompany = async (keyword) => {
-        try {
+        try { 
             const listCompany = await getAllCompany(keyword, checkIsAdmin());
             setCompanyList(listCompany);
         }
@@ -17,6 +19,7 @@ const AllCompany = () => {
             console.log(error);
             setCompanyList([]);
         }
+        
     }
 
     const checkIsAdmin = () => {
@@ -24,29 +27,31 @@ const AllCompany = () => {
         return (adminLoggedIn === true || adminLoggedIn === "true")
     }
 
-    const checkCompanyStatus = (isActive, isGranted) =>{
-        if(isActive){
-            if(isGranted){
+    const checkCompanyStatus = (isActive, isGranted) => {
+        if (isActive) {
+            if (isGranted) {
                 return "Đã kiểm duyệt"
             }
-            else{
+            else {
                 return "Mới đăng ký"
             }
         }
-        else{
-            if(isGranted){
+        else {
+            if (isGranted) {
                 return "Đã bị khóa"
             }
-            else{
+            else {
                 return "Duyệt không qua"
             }
         }
     }
 
     useEffect(() => {
+        setIsLoading(true)
         setIsAdmin(checkIsAdmin())
         const keyword = "";
         fetchListCompany(keyword);
+        setIsLoading(false)
     }, []);
 
     const handleSubmitSearch = () => {
@@ -54,7 +59,7 @@ const AllCompany = () => {
     }
 
     return (
-        <div>
+        <div className='all-company-body'>
             <h1>Danh sách công ty</h1>
             <div className="search-div">
                 <input type="text"
@@ -62,22 +67,24 @@ const AllCompany = () => {
                     onChange={(e) => setSearchInput(e.target.value)}></input>
                 <button type='button' onClick={() => handleSubmitSearch()} className="search-btn">Tìm kiếm</button>
             </div>
-            <div>
+            <div className='company-list'>
                 {companyList && companyList.map((company) => (
-                    <div key={company.Id}>
-                        <div>
-                            <img src={company.companyLogo}></img>
-                        </div>
-                        <div>
-                            <div>
-                                <h3><NavLink to={`/company/${company.Id}`}>{company.companyName}</NavLink></h3>
-                                <span>{checkCompanyStatus(company.isActive, company.isGranted)}</span>
+                    <NavLink className="link-company-card" key={company.Id} to={`/company/${company.Id}`}>
+                        <div className="company-card">
+                            <div className='company-card-left'>
+                                <img src={company.companyLogo}></img>
                             </div>
-                            <span>Địa chỉ: </span>
-                            <span>{company.City.cityId > 0 && company.City.cityName} - {company.companyAddress}</span>
-                            <p>Giới thiệu: {(company.companyIntro) ? (` ${company.companyIntro}`) : (` Chưa có thông tin`)}</p>
+                            <div className='company-card-right'>
+                                <div className='name-and-tag'>
+                                    <h2>{company.companyName}</h2>
+                                    <span>{checkCompanyStatus(company.isActive, company.isGranted)}</span>
+                                </div>
+                                <span>Địa chỉ: </span>
+                                <span>{company.City.cityId > 0 && company.City.cityName} - {company.companyAddress}</span>
+                                <p>Giới thiệu: {(company.companyIntro) ? (` ${company.companyIntro}`) : (` Chưa có thông tin`)}</p>
+                            </div>
                         </div>
-                    </div>
+                    </NavLink>
                 ))}
             </div>
             {(companyList.length === 0) &&
@@ -85,6 +92,7 @@ const AllCompany = () => {
                     <h2>Không tìm thấy công ty nào!</h2>
                 )
             }
+            {isLoading && <LoadingDiv></LoadingDiv>}
         </div>
 
     );

@@ -1,0 +1,62 @@
+.company-infor-box{
+    width: 70vw;
+    margin: 30px 15vw;
+    background-color: #fff;
+    border-radius: 20px;
+    border: solid 2px gainsboro;
+    padding: 20px 30px;
+}
+
+.company-infor-box h2{
+    color: #003B73;
+    margin: 5px 0px;
+}
+
+.company-infor-box i,
+.company-infor-box h3,
+.company-infor-box h4{
+    color: #003B73;
+}
+
+.company-infor-head{
+    display: flex;
+    flex-direction: row;
+}
+
+.infor-head-left{
+    width: 280px;
+    margin: 5px;
+    border-radius: 10px;
+    border: solid 1px gainsboro;
+    padding: 10px;
+    height: fit-content;
+    align-items: center;
+    text-align: center;
+}
+
+.infor-head-left img{
+    width: 260px;
+    aspect-ratio: 1;
+}
+
+.infor-head-right{
+    margin-left: 20px;
+    width: calc(100% - 300px);
+}
+
+.company-job-list{
+    margin-top: 40px;
+}
+
+.company-intro{
+    margin: 5px 0px;
+    padding-left: 0px;
+    white-space: pre-line;
+}
+
+.intro-text-area {
+    resize: vertical; /* Cho phép điều chỉnh kích thước theo chiều dọc */
+    padding: 5px;
+    font-size: 1.1em;
+    font-family: 'Segoe UI', Tahoma;
+}

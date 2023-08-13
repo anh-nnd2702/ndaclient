@@ -4,13 +4,17 @@ import { deleteJob, getAllCompanyJobs } from "../../apis/job.js";
 import JobChart from '../../components/jobChart.jsx';
 import "./dashboard.css"
 import { toast } from 'react-toastify';
-const CompanyDashboard = ({ isLoggedInHr }) => {
-    const [appliedList, setAppliedList] = useState([]);
+import LoadingDiv from '../../components/loading/loadingPage.jsx';
+import NewCompanyCover from '../../components/newCompanyCover/newCompanyCover'
+import { getCompanyInfo } from '../../apis/company.js';
+
+const CompanyDashboard = ({}) => {
     const [companyName, setCompanyName] = useState("");
     const [expiredCount, setExpiredCount] = useState(0);
-
+    const [isLoading, setIsLoading] = useState(true);
     const [jobList, setJobList] = useState([]);
     const [noJob, setNoJob] = useState(true);
+    const [companyInfor, setCompanyInfor] = useState({});
     const navigate = useNavigate()
 
     const formatDate = (t) => {
@@ -41,7 +45,10 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
         const isHr = localStorage.getItem("isLoggedInHr") === true || localStorage.getItem("isLoggedInHr") === "true";
         if (isHr) {
             const storedName = localStorage.getItem("companyName");
+            const companyId = localStorage.getItem("companyId")
             setCompanyName(storedName);
+            const companyData = await getCompanyInfo(companyId);
+            setCompanyInfor(companyData);
             const listJob = await getAllCompanyJobs();
             if (listJob && listJob.length > 0) {
                 setNoJob(false);
@@ -55,6 +62,7 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
         else {
             navigate("/")
         }
+        setIsLoading(false)
     }
 
     const handleDeleteJob = async (jobId) => {
@@ -82,7 +90,7 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
     useEffect(() => {
         fetchDataDashBoard()
     }, [])
-
+    //console.log(companyInfor);
     return (
         <div className='dashboard'>
             <h1>Bảng tin nhà tuyển dụng</h1>
@@ -163,6 +171,10 @@ const CompanyDashboard = ({ isLoggedInHr }) => {
                     </div>
                 </div>
             </div>
+            <LoadingDiv isLoading={isLoading}></LoadingDiv>
+            {(companyInfor && companyInfor.isActive==true && companyInfor.isGranted==false)&&(
+                <NewCompanyCover></NewCompanyCover>
+            )}
         </div>
     )
 

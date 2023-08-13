@@ -3,6 +3,8 @@ import "./jobDetail.css";
 import "../jobByCompany/jobByCompany";
 import { getCandidateCv } from "../../apis/candidate.js";
 import { NavLink, useNavigate } from "react-router-dom";
+import LoadingDiv from "../loading/loadingPage"
+
 const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
     company, isLoggedIn, isApplied, onApply, onSaveJob, onUnsaveJob, isSaved, onReport, isAdmin,
     onBlockJob, onPassReports }) => {
@@ -15,6 +17,10 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
     const [coverLetter, setCoverLetter] = useState("");
     const [isReport, setIsReport] = useState(false);
     const [reportText, setReportText] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [validatext, setValidatex] = useState("");
+
     const handleSaveJob = async () => {
         if (!isSaved) {
             await onSaveJob()
@@ -44,22 +50,33 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
     }, [isLoggedIn])
 
     const handleShowApplyForm = () => {
+        setValidatex("");
         setIsFormApply(!isFormApply);
     }
     const handleShowReportForm = () => {
+        setValidatex("")
         setIsReport(!isReport);
     }
 
     const handleSubmitReport = async () => {
-        try {
-            const reported = await onReport(reportText);
+        
+        if (reportText !== "") {
+            setValidatex("")
+            try {
+                setIsSubmitting(true);
+                const reported = await onReport(reportText);
+            }
+            catch (error) {
+                console.log(error);
+            }
+            finally {
+                setIsSubmitting(false);
+                setIsReport(false);
+                setReportText("");
+            }
         }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            setIsReport(false);
-            setReportText("");
+        else {
+            setValidatex("Vui lòng điền nội dung báo cáo")
         }
     }
 
@@ -113,16 +130,25 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
 
     const handleSubmitApply = async (e) => {
         e.preventDefault();
-        try {
-            const appliedJob = await onApply(cvId, coverLetter);
+
+        if (coverLetter !== "") {
+            setIsSubmitting(true);
+            setValidatex("");
+            try {
+                const appliedJob = await onApply(cvId, coverLetter);
+            }
+            catch (error) {
+                console.log(error);
+            }
+            finally {
+                setIsSubmitting(false);
+                setIsFormApply();
+                setCoverLetter("");
+                setCvId("");
+            }
         }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            setIsFormApply();
-            setCoverLetter("");
-            setCvId("");
+        else {
+            setValidatex("Vui lòng điền thư ứng tuyển")
         }
     }
 
@@ -143,45 +169,46 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
 
     return (
         <div className="job-body">
-            <div className="job-detail-header">
-                <div className="company-logo">
-                    {company && company.companyLogo ? (
-                        <img src={company.companyLogo} alt="Logo" />
-                    ) : (
-                        <img src={"https://drive.google.com/uc?export=view&id=1WaXr3NCH6M8_xdwwwYiNNXpgvoMjlFTl"} alt="Default Logo" />
-                    )}
-                </div>
-                <div className="detail-title-box">
-                    <h1 className="job-box-title">
-                        {job.jobTitle}
-                    </h1>
-                    <h2 className="company-name">{company.companyName}</h2>
-                    <p><i className="fa-regular fa-clock" /> Hạn cuối: {job.expireDate}</p>
-                </div>
-                {isLoggedIn ? (
-                    <div className="job-header_action">
-                        {!isApplied ? (<button type="button" id="btnApply" onClick={handleShowApplyForm}><i className="fa-regular fa-paper-plane"></i> Ứng tuyển</button>
+            <section id="Jobdetail">
+                <div className="job-detail-header">
+                    <div className="company-logo">
+                        {company && company.companyLogo ? (
+                            <img src={company.companyLogo} alt="Logo" />
                         ) : (
-                            <p className="applied-p">Đã ứng tuyển</p>
+                            <img src={"https://drive.google.com/uc?export=view&id=1WaXr3NCH6M8_xdwwwYiNNXpgvoMjlFTl"} alt="Default Logo" />
                         )}
-                        {!isSaved ?
-                            (<button type="button" id="btnSave" onClick={handleSaveJob}><i className="fa-regular fa-heart"></i> Lưu tin</button>
+                    </div>
+                    <div className="detail-title-box">
+                        <h1 className="job-box-title">
+                            {job.jobTitle}
+                        </h1>
+                        <NavLink className='link-to-company' to={`/company/${company.Id}`}><h2 className="company-name">{company.companyName}</h2></NavLink>
+                        <p><i className="fa-regular fa-clock" /> Hạn cuối: {job.expireDate}</p>
+                    </div>
+                    {isLoggedIn ? (
+                        <div className="job-header_action">
+                            {!isApplied ? (<button type="button" id="btnApply" onClick={handleShowApplyForm}><i className="fa-regular fa-paper-plane"></i> Ứng tuyển</button>
                             ) : (
-                                <div>
-                                    <p className="saved-p">Đã lưu</p>
-                                    <button type="button" id="btnUnSave" onClick={handleUnSaveJob}><i className="fa-regular fa-heart"></i> Bỏ lưu</button>
-                                </div>
-                            )
+                                <p className="applied-p">Đã ứng tuyển</p>
+                            )}
+                            {!isSaved ?
+                                (<button type="button" id="btnSave" onClick={handleSaveJob}><i className="fa-regular fa-heart"></i> Lưu tin</button>
+                                ) : (
+                                    <div>
+                                        <p className="saved-p">Đã lưu</p>
+                                    </div>
+                                )
 
-                        }
-                    </div>
-                ) : ((!isAdmin) &&
-                    <div className="job-header_action">
-                        <button className="btn-login" type="button" onClick={handleLogintoApply}>Đăng nhập</button>
-                    </div>
-                )}
+                            }
+                        </div>
+                    ) : ((!isAdmin) &&
+                        <div className="job-header_action">
+                            <button className="btn-login" type="button" onClick={handleLogintoApply}>Đăng nhập</button>
+                        </div>
+                    )}
 
-            </div>
+                </div>
+            </section>
             {isAdmin && (
                 <div className="admin-action-box">
                     {(job.ReportJobs && job.ReportJobs.length > 0) ? (
@@ -189,20 +216,20 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                             <h3>Tin tuyển dụng này có: {job.ReportJobs.length} lượt báo cáo</h3>
                             <h4>Nội dung báo cáo:</h4>
                             {job.ReportJobs.map((rp) => (
-                                <div key={rp.reportId}>
+                                <div className="report-text-item" key={rp.reportId}>
                                     <span>{formatModifiedTime(rp.reportTime)}</span>
-                                    <p>{rp.reportDescribe}</p>
+                                    <p>Nội dung: {rp.reportDescribe}</p>
                                 </div>
                             ))}
                         </div>
                     ) : (
                         <h3>Chưa có báo cáo nào về tin tuyển dụng này!</h3>
                     )}
-                    {!(job.isActive)&& <h3>Bạn đã ẩn tin này!</h3>}
+                    {!(job.isActive) && <h3>Bạn đã ẩn tin này!</h3>}
                     {(job.ReportJobs && job.ReportJobs.length > 0 && job.isActive) && (
                         <div>
-                            <button type="button" onClick={() => handleBlockJob(job.jobId)}><i className="fa-solid fa-eye-slash"></i>   Ẩn tin này</button>
-                            <button type="button" onClick={() => handlePassAllReports(job.jobId)}>Bỏ qua báo cáo</button>
+                            <button type="button" className="btn-cancel" onClick={() => handleBlockJob(job.jobId)}><i className="fa-solid fa-eye-slash"></i>   Ẩn tin này</button>
+                            <button type="button" className="btn-oke" onClick={() => handlePassAllReports(job.jobId)}>Bỏ qua báo cáo</button>
                         </div>
                     )}
                 </div>
@@ -213,101 +240,99 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                 <div><a href="#JobByCompany">Việc làm cùng công ty</a></div>
             </div>
             <div className="job-detail">
-                <section id="Jobdetail">
-                    <h1 className="section-header">
-                        Thông tin tuyển dụng
-                    </h1>
-                    <div className="basic-infor">
-                        <h2 >Thông tin cơ bản</h2>
-                        <div className="basic-infor-table">
-                            <div className="infor-left">
-                                {job.City && (
-                                    <p>Địa điểm làm việc: {City.cityName} <br /> {job.workAddress}</p>
-                                )}
-                                <p>Kinh nghiệm: {job.experience == '0' ? ("Không yêu cầu") :
-                                    (`${job.experience} năm`)
-                                }</p>
-                                <p>Hình thức: {JobType.jobTypeName}</p>
-                                <p>Cấp bậc: {WorkLevel.workLevelName}</p>
-                            </div>
-                            <div className="infor-right">
-                                <p>Số lượng tuyển: {job.hireCount == 0 ? ("Không giới hạn") : (`${job.hireCount}`)}</p>
-                                <p>Giới tính: {gender}</p>
-                                <p>Lĩnh vực: {WorkField.workFieldName}</p>
-                                <p>Mức lương: {wage}</p>
-                            </div>
+                <h2 className="section-header">
+                    Thông tin tuyển dụng
+                </h2>
+                <div className="basic-infor">
+                    <h2>Thông tin cơ bản</h2>
+                    <div className="basic-infor-table">
+                        <div className="infor-left">
+                            {job.City && (
+                                <p>Địa điểm làm việc: {City.cityName} <br /> {job.workAddress}</p>
+                            )}
+                            <p>Kinh nghiệm: {job.experience == '0' ? ("Không yêu cầu") :
+                                (`${job.experience} năm`)
+                            }</p>
+                            <p>Hình thức: {JobType.jobTypeName}</p>
+                            <p>Cấp bậc: {WorkLevel.workLevelName}</p>
+                        </div>
+                        <div className="infor-right">
+                            <p>Số lượng tuyển: {job.hireCount == 0 ? ("Không giới hạn") : (`${job.hireCount}`)}</p>
+                            <p>Giới tính: {gender}</p>
+                            <p>Lĩnh vực: {WorkField.workFieldName}</p>
+                            <p>Mức lương: {wage}</p>
                         </div>
                     </div>
-                    <div className="description-infor">
-                        <h1 className="section-header">Chi tiết công việc</h1>
-                        <div className="jd-box">
-                            <h3 className="jd-header">Mô tả công việc:</h3>
-                            <span className="span-job">{job.jobDescribe}</span>
-                        </div>
+                </div>
+                <div className="description-infor">
+                    <h2 className="section-header">Chi tiết công việc</h2>
+                    <div className="jd-box">
+                        <h3 className="jd-header">Mô tả công việc:</h3>
+                        <span className="span-job">{job.jobDescribe}</span>
+                    </div>
 
-                        {job.jobRequire && (
-                            <div className="jd-box">
-                                <h3 className="jd-header">Yêu cầu ứng viên:</h3>
-                                <span className="span-job">{job.jobRequire}</span>
-                            </div>)
-                        }
-                        {job.jobBenefit && (
-                            <div className="jd-box">
-                                <h3 className="jd-header">Quyền lợi:</h3>
-                                <span className="span-job">{job.jobBenefit}</span>
-                            </div>)
-                        }
-                    </div>
-                    <div className="job-action">
-                        <p><i className="fa-regular fa-clock" /> Hạn cuối ứng tuyển: {job.expireDate}</p>
-                        <div className="action-body-box">
-                            {isLoggedIn ? (
-                                <div className="action-btn-box">
-                                    {!isApplied ? (
-                                        <div className="action-item">
-                                            <p className="applied-p">Ứng tuyển ngay tại đây:</p>
-                                            <button type="button" id="btnApply" onClick={handleShowApplyForm}><i className="fa-regular fa-paper-plane"></i> Ứng tuyển</button>
-                                        </div>
+                    {job.jobRequire && (
+                        <div className="jd-box">
+                            <h3 className="jd-header">Yêu cầu ứng viên:</h3>
+                            <span className="span-job">{job.jobRequire}</span>
+                        </div>)
+                    }
+                    {job.jobBenefit && (
+                        <div className="jd-box">
+                            <h3 className="jd-header">Quyền lợi:</h3>
+                            <span className="span-job">{job.jobBenefit}</span>
+                        </div>)
+                    }
+                </div>
+                <div className="job-action">
+                    <p><i className="fa-regular fa-clock" /> Hạn cuối ứng tuyển: {job.expireDate}</p>
+                    <div className="action-body-box">
+                        {isLoggedIn ? (
+                            <div className="action-btn-box">
+                                {!isApplied ? (
+                                    <div className="action-item">
+                                        <p className="applied-p">Ứng tuyển ngay tại đây:</p>
+                                        <button type="button" id="btnApply" onClick={handleShowApplyForm}><i className="fa-regular fa-paper-plane"></i> Ứng tuyển</button>
+                                    </div>
+                                ) : (
+                                    <div className="action-item">
+                                        <p className="applied-p">Bạn đã ứng tuyển tin này</p>
+                                    </div>
+                                )}
+                                {!isSaved ?
+                                    (<div className="action-item">
+                                        <p className="saved-p">Lưu tin để xem sau:</p>
+                                        <button type="button" id="btnSave" onClick={handleSaveJob}><i className="fa-regular fa-heart"></i> Lưu tin</button>
+                                    </div>
                                     ) : (
                                         <div className="action-item">
-                                            <p className="applied-p">Bạn đã ứng tuyển tin này</p>
-                                        </div>
-                                    )}
-                                    {!isSaved ?
-                                        (<div className="action-item">
-                                            <p className="saved-p">Lưu tin để xem sau:</p>
-                                            <button type="button" id="btnSave" onClick={handleSaveJob}><i className="fa-regular fa-heart"></i> Lưu tin</button>
-                                        </div>
-                                        ) : (
-                                            <div className="action-item">
-                                                <p className="saved-p">Bạn đã lưu tin này</p>
-                                                <button type="button" id="btnUnSave" onClick={handleUnSaveJob}><i className="fa-regular fa-heart"></i> Bỏ lưu</button>
-                                            </div>)
+                                            <p className="saved-p">Bạn đã lưu tin này</p>
+                                            <button type="button" id="btnUnSave" onClick={handleUnSaveJob}><i className="fa-regular fa-heart"></i> Bỏ lưu</button>
+                                        </div>)
 
-                                    }
-                                </div>
-                            ) : ((!isAdmin) &&
-                                <div className="action-btn-box">
-                                    <p className="applied-p">Hãy đăng nhập ngay để ứng tuyển</p>
-                                    <button className="btn-login" type="button" onClick={handleLogintoApply}>Đăng nhập</button>
-                                </div>
-                            )}
-                            {isLoggedIn && (
-                                <div>
-                                    <h4>Báo cáo tin tuyển dụng: Nếu bạn thấy tin tuyển dụng này có dấu hiệu lừa đảo:</h4>
-                                    <button onClick={() => setIsReport(true)}><i className="fa-solid fa-triangle-exclamation"></i>  Báo cáo tin</button>
-                                </div>
-                            )}
-                        </div>
+                                }
+                            </div>
+                        ) : ((!isAdmin) &&
+                            <div className="action-btn-box">
+                                <p className="applied-p">Hãy đăng nhập ngay để ứng tuyển</p>
+                                <button className="btn-login" type="button" onClick={handleLogintoApply}>Đăng nhập</button>
+                            </div>
+                        )}
+                        {isLoggedIn && (
+                            <div>
+                                <h4>Báo cáo tin tuyển dụng: Nếu bạn thấy tin tuyển dụng này có dấu hiệu lừa đảo:</h4>
+                                <button onClick={() => setIsReport(true)}><i className="fa-solid fa-triangle-exclamation"></i>  Báo cáo tin</button>
+                            </div>
+                        )}
                     </div>
-                </section>
+                </div>
                 <section id="CompanyDetail">
                     <h1 className="section-header">Thông tin công ty</h1>
                     <div className="company-info-box">
                         <h1 className="company-name_info">{company.companyName}</h1>
                         <div className="intro-box">
                             <h2>Giới thiệu:</h2>
-                            <p>{company.companyIntro}</p>
+                            <p>{company.companyIntro ? company.companyIntro : "Chưa có giới thiệu"}</p>
                         </div>
                         <div className="bottom-info-box">
                             <h4>Địa chỉ</h4>
@@ -324,7 +349,8 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                     <div className="box-fillover"></div>
                     <div className="apply-box">
                         <h2>Gửi đơn ứng tuyển</h2>
-                        <form className="form-apply" onSubmit={handleSubmitApply}>
+                        <form className="form-apply">
+                            <span className='validate-text'>{validatext}</span>
                             {cvList.length > 0 ? (
                                 <div>
                                     <div className="apply-select-box">
@@ -353,8 +379,8 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                                         ></textarea>
                                     </div>
                                     <div className="apply-btn-box">
-                                        <button className="btnSubmitApply" type="submit">Ứng tuyển</button>
-                                        <button className="btnCancelApply" type="button" onClick={handleShowApplyForm}>Hủy</button>
+                                        <button className="btnSubmitApply" type="button" onClick={handleSubmitApply} disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : (`Ứng tuyển`)}</button>
+                                        <button className="btnCancelApply" type="button" onClick={handleShowApplyForm} disabled={isSubmitting}>Hủy</button>
                                     </div>
                                 </div>) : (
                                 <div>
@@ -372,6 +398,7 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                     <div className="apply-box">
                         <h2>Báo cáo tin tuyển dụng</h2>
                         <form className="form-apply">
+                            <span className='validate-text'>{validatext}</span>
                             <div div className="apply-select-box">
                                 <label htmlFor="reportDescribe">Nội dung:</label>
                                 <textarea
@@ -384,8 +411,8 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                                 ></textarea>
                             </div>
                             <div className="apply-btn-box">
-                                <button id="btnSubmitReport" type="button" onClick={handleSubmitReport}>Báo cáo</button>
-                                <button id="btnCancelReport" type="button" onClick={handleShowReportForm}>Hủy</button>
+                                <button id="btnSubmitReport" type="button" onClick={handleSubmitReport} disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : (`Báo cáo`)}</button>
+                                <button id="btnCancelReport" type="button" onClick={handleShowReportForm} disabled={isSubmitting}>Hủy</button>
                             </div>
                         </form>
                     </div>
@@ -393,6 +420,7 @@ const JobDetail = ({ job, WorkField, WorkLevel, JobType, City,
                 </div>
             )
             }
+            {isLoading && <LoadingDiv></LoadingDiv>}
         </div>
     )
 }

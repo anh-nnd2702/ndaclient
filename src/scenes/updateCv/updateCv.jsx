@@ -4,7 +4,7 @@ import { getCandidateCvById } from "../../apis/candidate";
 import { updateCv, updateCvWithImg } from "../../apis/cv";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "./updateCv.css";
+import "../createCv/createCv.css";
 import { getReference } from "../../apis/reference";
 import EducationForm from "../../components/cvEducation/educationForm";
 import ExperienceForm from "../../components/cvExperience/experienceForm";
@@ -204,6 +204,7 @@ const UpdateCvScene = ({isLoggedIn}) =>{
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 800,
                     });
+                    navigate(-1)
                 }
             }
             else {
@@ -243,6 +244,7 @@ const UpdateCvScene = ({isLoggedIn}) =>{
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 800,
                     });
+                    navigate(-1)
                 }
             }
         }
@@ -536,8 +538,8 @@ const UpdateCvScene = ({isLoggedIn}) =>{
     };
 
     return (
-        <div>
-            <h1>Chỉnh sửa Cv của bạn</h1>
+        <div className="create-cv-body">
+            <h1 className="create-cv-title">Chỉnh sửa Cv của bạn</h1>
             <form onSubmit={handleUpdateCv} className="form-create-cv">
                 <div className="input-img" >
                     <label htmlFor="cvImg">Ảnh hồ sơ (ảnh thẻ của bạn):</label>

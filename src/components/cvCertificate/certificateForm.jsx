@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 const CertificateForm = ({ onSubmitCertificate, onCancel, currentCert }) => {
-    const [certTitle, setCertTitle] = useState(currentCert.certTitle||"");
-    const [organization, setOrganization] = useState(currentCert.organization||"");
-    const [certDate, setCertDate] = useState(currentCert.certDate||"");
-    const [expireDate, setExpireDate] = useState(currentCert.expireDate||"");
-    const [certDescribe, setCertDescribe] = useState(currentCert.certDescribe||"");
+    const [certTitle, setCertTitle] = useState(currentCert.certTitle || "");
+    const [organization, setOrganization] = useState(currentCert.organization || "");
+    const [certDate, setCertDate] = useState(currentCert.certDate || "");
+    const [expireDate, setExpireDate] = useState(currentCert.expireDate || "");
+    const [certDescribe, setCertDescribe] = useState(currentCert.certDescribe || "");
     const [isNotEnd, setIsNotEnd] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
+    const [validatext, setValidatext] = useState("");
 
     useEffect(() => {
         if (JSON.stringify(currentCert) === '{}') {
@@ -21,19 +22,24 @@ const CertificateForm = ({ onSubmitCertificate, onCancel, currentCert }) => {
 
     const handleSubmitCertificate = (e) => {
         e.preventDefault();
-        const certificateInfo = {
-            certTitle,
-            organization,
-            certDate,
-            expireDate: isNotEnd ? (certDate) : (expireDate),
-            certDescribe,
-        };
-        if (!isUpdate) {
-            onSubmitCertificate(certificateInfo, -1);
-            resetAllFields();
+        if (isNotEnd) {
+            setExpireDate(certDate)
         }
-        else {
-            onSubmitCertificate(certificateInfo, currentCert.index)
+        if (validateForm()) {
+            const certificateInfo = {
+                certTitle,
+                organization,
+                certDate,
+                expireDate: isNotEnd ? (certDate) : (expireDate),
+                certDescribe,
+            };
+            if (!isUpdate) {
+                onSubmitCertificate(certificateInfo, -1);
+                resetAllFields();
+            }
+            else {
+                onSubmitCertificate(certificateInfo, currentCert.index)
+            }
         }
     };
 
@@ -50,10 +56,19 @@ const CertificateForm = ({ onSubmitCertificate, onCancel, currentCert }) => {
         onCancel();
     };
 
+    const validateForm = () => {
+        if (certTitle === "" || organization === "" || certDate === "" || (expireDate === "" && !isNotEnd)) {
+            setValidatext("Vui lòng điền đủ chứng chỉ, tổ chức cấp, ngày cấp và hết hạn");
+            return false;
+        }
+        else return true;
+    }
+
     return (
         <div className="pop-up-box">
             <h2>Chứng chỉ của bạn</h2>
             <form className="form-popup">
+                <span className="valid-text">{validatext}</span>
                 <div className="popup-input-box">
                     <label htmlFor="certTitle">Tên chứng chỉ:</label>
                     <input
@@ -71,6 +86,7 @@ const CertificateForm = ({ onSubmitCertificate, onCancel, currentCert }) => {
                         id="organization"
                         value={organization}
                         onChange={(e) => setOrganization(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="popup-input-box">

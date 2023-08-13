@@ -121,11 +121,11 @@ export const deleteCvById = async (cvId) =>{
       }
 }
 
-export const getAllCv = async () =>{
+export const getAllCv = async (filterParams) =>{
   try {
     const token = Cookies.get('token');
-    
     const result = await axios.get(`${DOMAIN}/cv/`, {
+      params: filterParams,
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',

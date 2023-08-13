@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 const AwardForm = ({ onSubmitAward, onCancel, currentAward }) => {
-    const [awardTitle, setAwardTitle] = useState(currentAward.awardTitle||"");
-    const [organization, setOrganization] = useState(currentAward.organization||"");
-    const [awardYear, setAwardYear] = useState(currentAward.awardYear||2023);
-    const [awardDescribe, setAwardDescribe] = useState(currentAward.awardDescribe||"");
+    const [awardTitle, setAwardTitle] = useState(currentAward.awardTitle || "");
+    const [organization, setOrganization] = useState(currentAward.organization || "");
+    const [awardYear, setAwardYear] = useState(currentAward.awardYear || 2023);
+    const [awardDescribe, setAwardDescribe] = useState(currentAward.awardDescribe || "");
     const [isUpdate, setIsUpdate] = useState(false);
+    const [validatext, setValidatext] = useState("");
     useEffect(() => {
         if (JSON.stringify(currentAward) === '{}') {
             setIsUpdate(false);
@@ -17,24 +18,26 @@ const AwardForm = ({ onSubmitAward, onCancel, currentAward }) => {
 
     const handleSubmitAward = (e) => {
         e.preventDefault();
-        const awardInfor = {
-            awardTitle,
-            organization,
-            awardYear,
-            awardDescribe,
-        };
-        if (!isUpdate) {
-            onSubmitAward(awardInfor, -1);
-            resetAllFields();
-        }
-        else {
-            onSubmitAward(awardInfor, currentAward.index)
+        if (validateForm()) {
+            const awardInfor = {
+                awardTitle,
+                organization,
+                awardYear,
+                awardDescribe,
+            };
+            if (!isUpdate) {
+                onSubmitAward(awardInfor, -1);
+                resetAllFields();
+            }
+            else {
+                onSubmitAward(awardInfor, currentAward.index)
+            }
         }
     };
 
     let allYears = [];
     let thisYear = (new Date()).getFullYear();
-    for(let x = 0; x <= 60; x++) {
+    for (let x = 0; x <= 60; x++) {
         allYears.push(thisYear - x)
     }
 
@@ -50,10 +53,19 @@ const AwardForm = ({ onSubmitAward, onCancel, currentAward }) => {
         onCancel();
     };
 
+    const validateForm = () => {
+        if (awardTitle === "" || organization === "") {
+            setValidatext("Vui lòng điền đủ tên giải thưởng, tổ chức trao tặng");
+            return false;
+        }
+        else return true;
+    }
+
     return (
         <div className="pop-up-box">
             <h2>Giải thưởng/ Danh hiệu</h2>
             <form className="form-popup">
+                <span className="valid-text">{validatext}</span>
                 <div className="popup-input-box">
                     <label htmlFor="awardTitle">Tên giải thưởng/ danh hiệu:</label>
                     <input

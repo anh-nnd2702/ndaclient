@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 const ActivityForm = ({ onSubmitActivity, onCancel, currentAct }) => {
-    const [activityName, setActivityName] = useState(currentAct.activityName||"");
-    const [organization, setOrganization] = useState(currentAct.organization||"");
-    const [startDate, setStartDate] = useState(currentAct.startDate||"");
-    const [endDate, setEndDate] = useState(currentAct.endDate||"");
-    const [activityDescribe, setActivityDescribe] = useState(currentAct.activityDescribe||"");
+    const [activityName, setActivityName] = useState(currentAct.activityName || "");
+    const [organization, setOrganization] = useState(currentAct.organization || "");
+    const [startDate, setStartDate] = useState(currentAct.startDate || "");
+    const [endDate, setEndDate] = useState(currentAct.endDate || "");
+    const [activityDescribe, setActivityDescribe] = useState(currentAct.activityDescribe || "");
     const [isNotEnd, setIsNotEnd] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
+    const [validatext, setValidatext] = useState("");
 
     useEffect(() => {
         if (JSON.stringify(currentAct) === '{}') {
@@ -21,19 +22,24 @@ const ActivityForm = ({ onSubmitActivity, onCancel, currentAct }) => {
 
     const handleSubmitActivity = (e) => {
         e.preventDefault();
-        const activityInfo = {
-            activityName,
-            organization,
-            startDate,
-            endDate: isNotEnd ? (startDate) : (endDate),
-            activityDescribe,
-        };
-        if (!isUpdate) {
-            onSubmitActivity(activityInfo, -1);
-            resetAllFields();
+        if(isNotEnd){
+            setEndDate(startDate);
         }
-        else {
-            onSubmitActivity(activityInfo, currentAct.index)
+        if (validateForm()) {
+            const activityInfo = {
+                activityName,
+                organization,
+                startDate,
+                endDate: isNotEnd? startDate: endDate,
+                activityDescribe,
+            };
+            if (!isUpdate) {
+                onSubmitActivity(activityInfo, -1);
+                resetAllFields();
+            }
+            else {
+                onSubmitActivity(activityInfo, currentAct.index)
+            }
         }
     };
 
@@ -50,10 +56,19 @@ const ActivityForm = ({ onSubmitActivity, onCancel, currentAct }) => {
         onCancel();
     };
 
+    const validateForm = () => {
+        if (activityName === "" || organization === "" || startDate === ""||(endDate===""&&!isNotEnd)) {
+            setValidatext("Vui lòng điền đủ tên hoạt động, tổ chức, ngày bắt đầu và kết thúc");
+            return false;
+        }
+        else return true;
+    }
+
     return (
         <div className="pop-up-box">
             <h2>Hoạt động xã hội</h2>
             <form className="form-popup">
+                <span className="valid-text">{validatext}</span>
                 <div className="popup-input-box">
                     <label htmlFor="activityName">Tên hoạt động:</label>
                     <input

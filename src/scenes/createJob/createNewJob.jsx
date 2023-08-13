@@ -4,13 +4,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createJob } from '../../apis/job';
 import JobForm from '../../containers/jobForm/jobForm';
-import "./createNewJob.css"
+import "./createNewJob.css";
 
 const CreateJobScene = ({ isLoggedInHr }) => {
     const navigate = useNavigate();
     const [isCreate, setIsCreate] = useState(true);
     const [isHr, setIsHr] = useState(false);
-    const [jobData, setJobData] = useState({})
+    const [jobData, setJobData] = useState({});
+    const [companyId, setCompanyId] = useState(0)
     useEffect(() => {
         checkIsHrStatus();
     }, [isLoggedInHr]);
@@ -21,7 +22,8 @@ const CreateJobScene = ({ isLoggedInHr }) => {
                 navigate('/');
             }
             else{
-                setIsHr(hasLog)
+                setIsHr(hasLog);
+                setCompanyId(localStorage.getItem("companyId"))
             }
         
     };
@@ -54,7 +56,7 @@ const CreateJobScene = ({ isLoggedInHr }) => {
     return (
         <div className='job-create-body'>
             <h1>Tạo tin tuyển dụng mới</h1>
-            <JobForm isLoggedInHr={isHr} isCreate={isCreate} onSubmitJob={handleSubmit} onUpdateJob={handleSubmit} jobData={jobData}></JobForm>
+            <JobForm companyId={companyId} isCreate={isCreate} onSubmitJob={handleSubmit} onUpdateJob={handleSubmit} jobData={jobData}></JobForm>
             <ToastContainer />
         </div>
     )

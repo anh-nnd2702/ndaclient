@@ -7,7 +7,6 @@
     border-radius: 5px;
     border: solid 1px #60A3D9;
     background-color: #fff;
-    padding-bottom: 10px;
 }
 
 .login-box h1{
@@ -16,6 +15,7 @@
 
 #appLogoLogin {
     max-width: 250px;
+    margin-bottom: 10px;
 }
 
 .signup-option {

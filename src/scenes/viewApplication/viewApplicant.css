@@ -1,20 +1,31 @@
 .view-apply-body{
-    width: 80vw;
-    margin: 30px 10vw;
-    background-color: #fff;
-    border-radius: 20px;
+    width: 100vw;
+    margin-top: 20px;
     padding: 25px;
+    padding-top: 0px;
+    background-color: #fff;
+}
+
+.view-job{
+    width: 70vw;
+    margin: 0px 15vw;
+    background-color: #fff;
+    padding: 20px;
 }
 
 .view-job h2{
     color: #003B73;
+    margin: 0xp;
 }
 
 .cover-letter-box{
     border: solid 2px #60A3D9;
-    width: 55%;
+    width: 70vw;
     padding-left: 20px;
     border-radius: 10px;
+    margin-left: 15vw;
+    margin-right: 15vw;
+    background-color: #fff;
 }
 
 .cover-letter-box h3{
@@ -26,23 +37,25 @@
 }
 
 #cvPassBtn{
-    width: 150px;
+    width: fit-content;
     padding: 8px 14px;
     border-radius: 4px;
     background-color: #18A558;
     color: #fff;
     margin-left: 30px;
     border: solid 1px #18A558;
+    cursor: pointer;
 }
 
 #cvFailBtn{
-    width: 150px;
+    width: fit-content;
     padding: 8px 14px;
     border-radius: 4px;
     background-color: #EB455F;
     color: #fff;
     margin-left: 30px;
     border: solid 1px #EB455F;
+    cursor: pointer;
 }
 
 #backBtn{
@@ -53,6 +66,7 @@
     color: #fff;
     margin-left: 30px;
     border: solid 1px #60A3D9;
+    cursor: pointer;
 }
 
 .print-pdf{
@@ -63,4 +77,17 @@
     color: #fff;
     margin-left: 30px;
     border: solid 1px #ffd23f;
+    cursor: pointer;
+}
+
+.status-box{
+    float: right;
+    padding-right: 20px;
+}
+
+.hr-action{
+    margin-top: 10px;
+    margin-left: 5vw;
+    text-align: center;
+    margin-right: 5vw;
 }

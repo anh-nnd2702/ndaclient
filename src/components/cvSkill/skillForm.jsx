@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Rating from "react-rating";
 
 const SkillForm = ({ onSubmitSkill, onCancel, currentSkill }) => {
-    const [skillName, setSkillName] = useState(currentSkill.skillName||"");
-    const [skillLevel, setSkillLevel] = useState(currentSkill.skillLevel|| 0);
-    const [skillDescribe, setSkillDescribe] = useState(currentSkill.skillDescribe||"");
+    const [skillName, setSkillName] = useState(currentSkill.skillName || "");
+    const [skillLevel, setSkillLevel] = useState(currentSkill.skillLevel || 0);
+    const [skillDescribe, setSkillDescribe] = useState(currentSkill.skillDescribe || "");
     const [levelP, setLevelP] = useState("")
     const [isUpdate, setIsUpdate] = useState(false);
-
+    const [validatext, setValidatext] = useState("");
     useEffect(() => {
         if (JSON.stringify(currentSkill) === '{}') {
             setIsUpdate(false);
@@ -41,19 +41,30 @@ const SkillForm = ({ onSubmitSkill, onCancel, currentSkill }) => {
 
     const handleSubmitSkill = (e) => {
         e.preventDefault();
-        const skillInfo = {
-            skillName,
-            skillLevel,
-            skillDescribe,
-        };
-        if (!isUpdate) {
-            onSubmitSkill(skillInfo, -1);
-            resetAllFields();
-        }
-        else {
-            onSubmitSkill(skillInfo, currentSkill.index)
+        const checkValid = validateForm()
+        if (checkValid) {
+            const skillInfo = {
+                skillName,
+                skillLevel,
+                skillDescribe,
+            };
+            if (!isUpdate) {
+                onSubmitSkill(skillInfo, -1);
+                resetAllFields();
+            }
+            else {
+                onSubmitSkill(skillInfo, currentSkill.index)
+            }
         }
     };
+
+    const validateForm = () => {
+        if (skillName == "") {
+            setValidatext("Vui lòng điền tên kỹ năng");
+            return false;
+        }
+        else return true;
+    }
 
     const resetAllFields = () => {
         setSkillName("");
@@ -70,6 +81,7 @@ const SkillForm = ({ onSubmitSkill, onCancel, currentSkill }) => {
         <div className="pop-up-box">
             <h2>Kỹ năng của bạn</h2>
             <form className="form-popup">
+                <span className="valid-text">{validatext}</span>
                 <div className="popup-input-box">
                     <label htmlFor="skillName">Tên kỹ năng:</label>
                     <input
@@ -97,7 +109,6 @@ const SkillForm = ({ onSubmitSkill, onCancel, currentSkill }) => {
                         id="skillDescribe"
                         value={skillDescribe}
                         onChange={(e) => setSkillDescribe(e.target.value)}
-                        required
                     ></textarea>
                 </div>
                 <button className="popup-add-btn" type="button" onClick={handleSubmitSkill}>

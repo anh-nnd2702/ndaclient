@@ -10,6 +10,7 @@ const EducationForm = ({ onSubmitEdu, onCancel, currentEducation, eduLevelList }
     const [eduDescribe, setEduDescribe] = useState(currentEducation.eduDescribe || "");
     const [isNotGrade, setIsNotGrade] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
+    const [validatext, setValidatext] = useState("");
     useEffect(() => {
         if (JSON.stringify(currentEducation) === '{}') {
             setIsNotGrade(false);
@@ -22,6 +23,10 @@ const EducationForm = ({ onSubmitEdu, onCancel, currentEducation, eduLevelList }
 
     const handleSubmitEdu = (e) => {
         e.preventDefault();
+        if(isNotGrade){
+            setEndDate(startDate);
+        }
+        if(validateForm()){
         const educationInfo = {
             schoolName,
             eduLevelId,
@@ -36,7 +41,7 @@ const EducationForm = ({ onSubmitEdu, onCancel, currentEducation, eduLevelList }
         }
         else {
             onSubmitEdu(educationInfo, currentEducation.index)
-        }
+        }}
     };
 
     const resetAllField = () => {
@@ -57,10 +62,19 @@ const EducationForm = ({ onSubmitEdu, onCancel, currentEducation, eduLevelList }
         setIsNotGrade(e.target.checked);
     }
 
+    const validateForm = () => {
+        if (schoolName === "" || major === "" || startDate === "" || (endDate === "" && !isNotGrade)) {
+            setValidatext("Vui lòng điền đủ tên trường, khoa, ngày bắt đầu và ngày tốt nghiệp");
+            return false;
+        }
+        else return true;
+    }
+
     return (
         <div className="pop-up-box">
             <h2>Nhập học vấn của bạn</h2>
             <form className="form-popup">
+                <span className="valid-text">{validatext}</span>
                 <div className="popup-input-box">
                     <label htmlFor="schoolName">Tên trường:</label>
                     <input
@@ -100,6 +114,7 @@ const EducationForm = ({ onSubmitEdu, onCancel, currentEducation, eduLevelList }
                         id="startDate"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="popup-input-box">
@@ -127,7 +142,6 @@ const EducationForm = ({ onSubmitEdu, onCancel, currentEducation, eduLevelList }
                         id="eduDescribe"
                         value={eduDescribe}
                         onChange={(e) => setEduDescribe(e.target.value)}
-                        required
                     ></textarea>
                 </div>
                 <button className="popup-add-btn" type="button" onClick={handleSubmitEdu}>Lưu</button>

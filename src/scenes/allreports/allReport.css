@@ -1,0 +1,13 @@
+.all-report-body{
+    width: 60vw;
+    margin: 30px 20vw;
+    padding: 20px 30px;
+    border-radius: 20px;
+    background-color: #fff;
+    border: solid 2px gainsboro;
+}
+
+.all-report-body h1{
+    margin: 10px 0px;
+    color: #003B73;
+}

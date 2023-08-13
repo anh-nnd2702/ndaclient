@@ -56,12 +56,12 @@ const AdminHeader = ({isAdmin, onLogout , notifications, handleClickNoti}) => {
                                 <img className='avatar' src="https://drive.google.com/uc?export=view&id=1TGmpHymRq3R-dq6eqYeIJfHgt461e6FE" alt="Default Avatar" />
                             </div>
                             <p>Quản trị viên</p>
-                            <div>
+                            {/*<div>
                                 <i className='fa-solid fa-bell notification-icon' onClick={handleClickNotiBell}></i>
                                 {(notifications && notifications.length > 0) &&
                                     <span className="notification-count">{notifications.length}</span>
                                 }
-                            </div>
+                            </div>*/}
                             <div className='btn-logout'>
                                 <button id="logoutBtn" onClick={handleLogout}>Đăng xuất</button>
                             </div>

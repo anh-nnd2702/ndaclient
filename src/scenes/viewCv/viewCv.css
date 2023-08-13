@@ -1,9 +1,10 @@
 .viewCv{
-    width: 60vw;
-    margin: 30px 20vw;
+    width: 70vw;
+    margin: 30px 15vw;
     background-color: #fff;
     border-radius: 20px;
     padding: 20px;
+    border: solid 2px gainsboro;
 }
 
 .viewCv h1{
@@ -23,9 +24,10 @@
 }
 
 .img-box{
-    width: 20%;
+    width: 17%;
     height: fit-content;
     margin-right: 20px;
+    margin-left: 20px;
     border: solid 2px #60A3D9;
     text-align: center;
     padding: 2px;
@@ -44,7 +46,7 @@
 }
 
 .cv-infor{
-    width: 70%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     margin-left: 20px;
@@ -94,6 +96,7 @@
 
 .cv-part h2{
     margin: 5px 10px 10px 5px;
+    color: #003B73;
 }
 
 .cv-part-skill{
@@ -101,4 +104,24 @@
     grid-template-columns: 45% 45%;
     column-gap: 10%;
     row-gap: 10px;
+}
+
+.cv-item {
+    padding: 20px;
+}
+
+.cv-item-head h3{
+    margin: 0px 0px 10px 0px;
+    color: #253DA1;
+}
+
+.cv-item p{
+    margin: 0px 10px;
+    font-size: 0.9em;
+}
+
+.cv-item h4,
+.cv-item h5{
+    margin: 4px 10px;
+    color: #003B73;
 }

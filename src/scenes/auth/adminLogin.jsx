@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
-import LoginForm from "../components/auth/loginForm";
+import LoginForm from "../../components/auth/loginForm";
 const AdminLogin = ({onLogin}) =>{
     const navigate = useNavigate();
 

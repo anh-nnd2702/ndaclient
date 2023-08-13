@@ -32,12 +32,12 @@ const ViewCv = () => {
     const checkCertTime = (sT, eT) => {
         if (sT === eT) {
             const fST = formatDate(sT);
-            return `Ngày cấp: ${fST} - Không hết hạn`
+            return `${fST}`
         }
         else {
             const fST = formatDate(sT);
             const eST = formatDate(eT);
-            return `Ngày cấp: ${fST} - Hạn đến: ${eST}`
+            return `${fST} - ${eST}`
         }
     }
 
@@ -165,7 +165,7 @@ const ViewCv = () => {
                                         <p>{checkExpTime(prj.startDate, prj.endDate)}</p>
                                     </div>
                                     <h4>{checkTeamSize(prj.teamSize)}</h4>
-                                    <h5>{prj.prjPosition}</h5>
+                                    <h5>Vai trò: {prj.prjPosition}</h5>
                                     <p>{prj.prjDescribe}</p>
                                 </div>
                             ))}
@@ -179,13 +179,14 @@ const ViewCv = () => {
                                     <div key={skill.skillId} className='cv-item'>
                                         <div className='cv-item-head'>
                                             <h3>{skill.skillName}</h3>
-                                            <Rating
+                                        </div>
+                                        {skill.skillLevel>0&&
+                                        <Rating
                                                 initialRating={skill.skillLevel}
                                                 emptySymbol={<i className="rate-icon fa-regular fa-star"></i>}
                                                 fullSymbol={<i className="rate-icon fa-solid fa-star"></i>}
                                                 readonly
-                                            />
-                                        </div>
+                                            />}
                                         <p>{skill.skillDescribe}</p>
                                     </div>
                                 ))}
@@ -224,7 +225,7 @@ const ViewCv = () => {
                     )}
                     {(cvActivity) && (
                         <div className='cv-part'>
-                            <h2>Hoạt động</h2>
+                            <h2>Hoạt động xã hội</h2>
                             {cvActivity.map((act) => (
                                 <div key={act.activityId} className='cv-item'>
                                     <div className='cv-item-head'>

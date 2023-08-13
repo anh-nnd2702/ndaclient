@@ -8,6 +8,7 @@ const LoginForm = ({ onLogin, isAminLogin }) => {
   const [error, setError] = useState('');
   const [isHr, setIsHr] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ const LoginForm = ({ onLogin, isAminLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     setError('');
 
     try {
@@ -37,6 +39,9 @@ const LoginForm = ({ onLogin, isAminLogin }) => {
       setError(
         'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.'
       );
+    }
+    finally{
+      setIsSubmitting(false);
     }
   };
 
@@ -56,15 +61,16 @@ const LoginForm = ({ onLogin, isAminLogin }) => {
           <NavLink to="/forgotpassword">Quên mật khẩu</NavLink>
         </div>
       </div>
-      {!isAminLogin && <div>
-        <label style={{marginLeft: "30px", paddingLeft:"30px"}}><input
+      {!isAminLogin && <div className="check-isHr-label">
+        <label><input
+          className="checkbox-isHr"
           type="checkbox"
           checked={isHr}
           onChange={(e) => setIsHr(e.target.checked)}
         ></input>Tôi là nhà tuyển dụng</label>
       </div>}
 
-      <button type="submit" id='btnLogin'>Đăng nhập</button>
+      <button type="submit" id='btnLogin' disabled={isSubmitting}>{isSubmitting ? <i className="fa fa-spinner fa-spin"></i> :(`Đăng nhập`)}</button>
     </form>
   );
 };

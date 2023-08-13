@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getAllCompany, updateCompanyStatus } from "../apis/company.js";
-import { updateJobStatus } from "../apis/job.js";
-import { deleteReport, getAllReport, updateReportStatus } from "../apis/reportJob.js";
+import { getAllCompany, updateCompanyStatus } from "../../apis/company.js";
+import { deleteReport, getAllReport, updateReportStatus } from "../../apis/reportJob.js";
+import ReportCard from "../../components/reportCard/reportCard.jsx";
+import LoadingDiv from "../../components/loading/loadingPage.jsx";
+import "./adminDashboard.css"
 
 const AdminDashboard = () => {
     const [companyList, setCompanyList] = useState([]);
     const [reportList, setReportList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     const fetchCompany = async () => {
@@ -40,12 +43,17 @@ const AdminDashboard = () => {
                 setCompanyList([])
             }
         }
+        setIsLoading(false);
     }
 
     const fetchReport = async () => {
         try {
-            const allReport = await getAllReport();
+            let allReport = await getAllReport();
             if (allReport && allReport.length > 0) {
+                allReport = allReport.filter((report) => {
+                    return (!report.reportStatus)
+                })
+                console.log(allReport);
                 setReportList(allReport);
             }
         }
@@ -53,19 +61,6 @@ const AdminDashboard = () => {
             setReportList([]);
             console.log("error fetching report!");
         }
-    }
-
-    function formatModifiedTime(modifiedDate) {
-        const date = new Date(modifiedDate);
-
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear().toString();
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-
-        const formattedDate = `ngày: ${day}/${month}/${year} lúc ${hours}:${minutes}`;
-        return formattedDate;
     }
 
     const handleChangePermission = async (companyId, isActive, isGranted) => {
@@ -76,6 +71,7 @@ const AdminDashboard = () => {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 900,
                 });
+                removeCompanyFromList(companyId)
             }
         }
         catch (error) {
@@ -86,7 +82,7 @@ const AdminDashboard = () => {
         }
     }
 
-    const handleLockJob = async (jobId) => {
+    /*const handleLockJob = async (jobId) => {
         try{
             const formData = {isActive: false}
             const result = await updateJobStatus(jobId, formData);
@@ -103,6 +99,20 @@ const AdminDashboard = () => {
                 autoClose: 900,
             });
         }
+    }*/
+
+    const removeReportFromList = (reportId) =>{
+        const newReportList = reportList.filter((rp) =>{
+            return (rp.reportId) !== reportId
+        })
+        setReportList(newReportList);
+    }
+
+    const removeCompanyFromList = (companyId) =>{
+        const newCompanyList = companyList.filter((cpn) =>{
+            return cpn.Id !== companyId
+        });
+        setCompanyList(newCompanyList);
     }
 
     const handleDeleteReport = async (reportId) => {
@@ -113,6 +123,7 @@ const AdminDashboard = () => {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 900,
                 });
+                removeReportFromList(reportId)
             }
         }
         catch(error){
@@ -123,7 +134,7 @@ const AdminDashboard = () => {
         }
     }
 
-    const handleLockCompany = async (companyId) => {
+    /*const handleLockCompany = async (companyId) => {
         try{
             const isActive = false;
             const isGranted = true;
@@ -141,7 +152,7 @@ const AdminDashboard = () => {
                 autoClose: 900,
             });
         }
-    }
+    }*/
 
     const handleUpdateReport = async (reportId) => {
         try{
@@ -152,6 +163,7 @@ const AdminDashboard = () => {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 900,
                 });
+                removeReportFromList(reportId);
             }
         }
         catch(error){
@@ -167,67 +179,56 @@ const AdminDashboard = () => {
         fetchReport();
     }, [])
     return (
-        <div>
-            <h1>Trang chủ admin</h1>
+        <div className="admin-dashboard-body">
+            <h1>Trang chủ</h1>
             <div className="company-list">
                 <h2>Nhà tuyển dụng mới đăng ký</h2>
                 {(companyList && companyList.length > 0) ? (
                     <div>
                         {companyList.map((company) => (
-                            <div key={company.Id}>
-                                <div>
+                            <div key={company.Id} className='company-card'>
+                                <div className="card-left">
                                     <img src={company.companyLogo} alt="company logo"></img>
                                 </div>
-                                <div>
-                                    <h3><NavLink to={`/company/${company.Id}`}>{company.companyName}</NavLink></h3>
+                                <div className="card-center">
+                                    <NavLink to={`/company/${company.Id}`}><h3>{company.companyName}</h3></NavLink>
                                     <h4>{company.companyAddress} - {(company.City.cityId > 0) ? (company.City.cityName) : ("")}</h4>
-                                    <p>{company.companyIntro}</p>
+                                    <p>Giới thiệu: {company.companyIntro?(`${company.companyIntro}`):('Chưa có giới thiệu')}</p>
                                     {(company.companyLicense === null) ?
                                         (<span>Nhà tuyển dụng chưa tải lên giấy phép</span>) :
                                         (<NavLink to={company.companyLicense} target="_blank" rel="noopener noreferrer">Xem giấy phép</NavLink>)}
                                 </div>
-                                <div>
-                                    <button type="button" onClick={() => handleChangePermission(company.Id, true, true)}>Cho phép đăng tin</button>
-                                    <button type="button" onClick={() => handleChangePermission(company.Id, false, false)}>Không cho phép đăng tin</button>
+                                <div className="card-right">
+                                    <button className="btn-oke" type="button" onClick={() => handleChangePermission(company.Id, true, true)}>Cho phép đăng tin</button>
+                                    <button className="btn-cancel" type="button" onClick={() => handleChangePermission(company.Id, false, false)}>Không cho phép đăng tin</button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <h2>Chưa có nhà tuyển dụng mới nào!</h2>
+                    <h3>Chưa có nhà tuyển dụng mới nào!</h3>
                 )}
             </div>
 
             <div className="report-div">
+                    <h2>Báo cáo tin tuyển dụng</h2>
                 {(reportList && reportList.length > 0) ? (
                     <div>
                         {reportList.map((report) => (
                             <div key={report.reportId}>
-                                <h3><NavLink to={`/job/${report.Job.jobId}`}>{`ID-${report.Job.jobId} - ${report.Job.jobTitle}`}</NavLink></h3>
-                                <h4>{report.Job.company.companyName}</h4>
-                                <h4>Người báo cáo: {report.Candidate.fullName}</h4>
-                                <p>Nội dung báo cáo: {report.reportDescribe}</p>
-                                <span>Báo cáo {formatModifiedTime(report.reportTime)}</span>
-                                <div className="report-actions">
-                                    <button type="button" onClick={() => handleDeleteReport(report.reportId)}>Xóa báo cáo</button>
-                                    <button type="button" onClick={() => handleLockJob(report.Job.jobId)}>Ẩn tin</button>
-                                    <button type="button" onClick={() => handleLockCompany(report.Job.companyId)}>Khóa tài khoản NTD</button>
-                                    {(report.reportStatus<1) ?
-                                        (<button type="button" onClick={() => handleUpdateReport}>Bỏ qua báo cáo</button>) :
-                                        (<span>Báo cáo đã duyệt</span>)}
-                                </div>
+                                <ReportCard report={report} handleDeleteReport={handleDeleteReport} handleUpdateReport={handleUpdateReport}></ReportCard>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <h2>Chưa có báo cáo mới nào!</h2>
+                    <h3>Chưa có báo cáo mới nào!</h3>
                 )}
             </div>
             <ToastContainer></ToastContainer>
+            <LoadingDiv isLoading={isLoading}></LoadingDiv>
         </div>
 
     )
-
 }
 
 export default AdminDashboard;
