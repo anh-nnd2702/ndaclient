@@ -53,15 +53,15 @@ const ViewApplication = () => {
         }
     }, [hasFetched])
 
-    /*const handlePrintPDF = (fullName) => {
+    const handlePrintPDF = (fullName) => {
         const element = document.getElementById('componentToPrint');
         console.log(fullName);
         html2pdf()
             .from(element)
             .save(`${fullName}_fileCv.pdf`);
-    };*/
+    };
 
-    const handlePrintPDF = async (fullName) => {
+    /*const handlePrintPDF = async (fullName) => {
         const element = document.getElementById('componentToPrint');
         const pdfOptions = {
             margin: 10,
@@ -113,7 +113,7 @@ const ViewApplication = () => {
         // Save PDF to a file
         pdf.save(`${fullName}_fileCv.pdf`);
     };
-
+    */
 
     const updateStatusApply = async (newStatus) => {
         const updated = await updateApplyStatus(applyId, newStatus);
