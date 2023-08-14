@@ -360,3 +360,7 @@
     height: 20px;
     margin: 5px;
 }
+
+.valid-text{
+    color: red;
+}
