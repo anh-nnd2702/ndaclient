@@ -35,11 +35,9 @@ export const signUp = async (fullName, email, password) => {
       addAuthData(infor);
       Cookies.set('token', token, { expires: 7, secure: true });
     }
-    else {
-      throw new Error("cannot login")
-    }
+    
     addAuthData(infor);
-    return infor;
+    return response.status;
   } catch (error) {
     throw error.response.data.error;
   }
